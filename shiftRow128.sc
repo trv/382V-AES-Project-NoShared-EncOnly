@@ -13,6 +13,6 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 				blockShifted[i][j] = block[i][(j+i) % 4];
 			}
 		}
-		blockOut.send(&blockShifted[0[0], sizeof(unsigned char) * 16);
+		blockOut.send(&blockShifted[0][0], sizeof(unsigned char) * 16);
 	}
 };
