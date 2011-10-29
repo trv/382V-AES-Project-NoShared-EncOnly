@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+import "c_queue";
+
+behavior MixColumns(i_receiver QueueIn, i_sender QueueOut) {
+    
+    void mixColumn(unsigned char *r) {
+        unsigned char a[4];
+        unsigned char b[4];
+        unsigned char c;
+        unsigned char h;    
+
+        for(c = 0; c < 4; c++) {
+            a[c] = r[c];
+            h = r[c] & 0x80; /* hi bit */
+            b[c] = r[c] << 1;
+            if(h == 0x80) 
+                b[c] ^= 0x1B; /* Rijndael's Galois field */
+        }
+
+        r[0] = b[0] ^ a[3] ^ a[2] ^ b[1] ^ a[1];
+        r[1] = b[1] ^ a[0] ^ a[3] ^ b[2] ^ a[2];
+        r[2] = b[2] ^ a[1] ^ a[0] ^ b[3] ^ a[3];
+        r[3] = b[3] ^ a[2] ^ a[1] ^ b[0] ^ a[0];
+    }
+
+
+    void main(void) {
+        unsigned char block[16];
+        int i;
+
+        QueueIn.receive(&block, sizeof(block)); 
+        
+        for (i = 0; i < 4; i++) {
+            mixColumn(block + (i*4));
+        }
+
+        QueueOut.send(&block, sizeof(block));
+        
+    }
+
+
+
+};
