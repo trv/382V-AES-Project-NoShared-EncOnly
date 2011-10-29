@@ -12,8 +12,8 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 		4, 199, 35, 195, 24, 150, 5, 154,
 		7, 18, 128, 226, 235, 39, 178, 117,
 		9, 131, 44, 26, 27, 110, 90, 160,
-		82, 59, 214, 179, 41, 227, 47, 132,
-		83, 209, 0, 237, 32, 252, 177, 91,
+		82, 59, 214, 179, 41, 227, 47, 116,
+		83, 209, 0, 237, 16, 252, 177, 91,
 		106, 203, 190, 57, 74, 76, 88, 207,
 		208, 239, 170, 251, 67, 77, 51, 133,
 		69, 249, 2, 127, 80, 60, 159, 168,
@@ -28,7 +28,7 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 		231, 200, 55, 109, 141, 213, 78, 169,
 		108, 86, 244, 234, 101, 122, 174, 8,
 		186, 120, 37, 46, 28, 166, 180, 198,
-		232, 221, 116, 31, 75, 189, 139, 138,
+		216, 221, 116, 31, 75, 189, 139, 138,
 		112, 62, 181, 102, 72, 3, 246, 14,
 		97, 53, 87, 185, 134, 193, 29, 158,
 		225, 248, 152, 17, 105, 217, 142, 148,
@@ -36,15 +36,15 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 		140, 161, 137, 13, 191, 230, 66, 104,
 		65, 153, 45, 15, 176, 84, 187, 22};
 
-		unsigned char block[128];
+		unsigned char block[16];
 
 		void main (void) {
 			int i;
-			blockIn.receive(&block, sizeof(unsigned char) * 128);
-			for (i = 0; i < 128; i++){
+			blockIn.receive(&block, sizeof(unsigned char) * 16);
+			for (i = 0; i < 16; i++){
 				block[i] = lookupTable[block[i]];
 			}
-			blockOut.send(&block, sizeof(unsigned char) * 128);
+			blockOut.send(&block, sizeof(unsigned char) * 16);
 		}
 };
 
