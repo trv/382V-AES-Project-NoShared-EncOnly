@@ -40,11 +40,11 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 
 		void main (void) {
 			int i;
-			blockIn.receive(&block, sizeof(unsigned char) * 16);
+			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 			for (i = 0; i < 16; i++){
 				block[i] = lookupTable[block[i]];
 			}
-			blockOut.send(&block, sizeof(unsigned char) * 16);
+			blockOut.send(&block[0], sizeof(unsigned char) * 16);
 		}
 };
 
