@@ -1,4 +1,4 @@
-
+#define TEST_LENGTH 1
 #define BYTE_SUB_VECTORS	"vectors/CBCGFSbox128.rsp"
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +13,7 @@ behavior stimulus(i_sender blockOut) {
 		char * bufferPt;
 		int count;
 		int i;
+		int j;
 		unsigned char key[16], iv[16], plaintext[16], ciphertext[16];
 
 		fp = fopen(BYTE_SUB_VECTORS, "r");
@@ -22,75 +23,77 @@ behavior stimulus(i_sender blockOut) {
 		}
 		//advance to the first "COUNT" in the file
 		for (fgets(buffer, 128, fp); buffer[0] != 'C'; fgets(buffer, 128, fp)) {}
-		//parse the count number
-		sscanf(buffer, "COUNT = %u", &count);
-		//next line
-		fgets(buffer, 128, fp);
-		//parse key
-		//find = sign
-		for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
-		//key starts 2 after the =
-		bufferPt += 2;
-		for (i = 0; i < 16; i ++){
-			sscanf(bufferPt, "%2hhx", &key[i]);
+		for (j = 0; j < TEST_LENGTH; j++){
+			//parse the count number
+			sscanf(buffer, "COUNT = %u", &count);
+			//next line
+			fgets(buffer, 128, fp);
+			//parse key
+			//find = sign
+			for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+			//key starts 2 after the =
 			bufferPt += 2;
-		}
-		//next line
-		fgets(buffer, 128, fp);
-		//parse IV
-		//find = sign
-		for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
-		//IV starts 2 after the =
-		bufferPt += 2;
-		for (i = 0; i < 16; i ++){
-			sscanf(bufferPt, "%2hhx", &iv[i]);
+			for (i = 0; i < 16; i ++){
+				sscanf(bufferPt, "%2hhx", &key[i]);
+				bufferPt += 2;
+			}
+			//next line
+			fgets(buffer, 128, fp);
+			//parse IV
+			//find = sign
+			for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+			//IV starts 2 after the =
 			bufferPt += 2;
-		}
-		//next line
-		fgets(buffer, 128, fp);
-		//parse plaintext
-		//find = sign
-		for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
-		//plaintext starts 2 after the =
-		bufferPt += 2;
-		for (i = 0; i < 16; i ++){
-			sscanf(bufferPt, "%2hhx", &plaintext[i]);
+			for (i = 0; i < 16; i ++){
+				sscanf(bufferPt, "%2hhx", &iv[i]);
+				bufferPt += 2;
+			}
+			//next line
+			fgets(buffer, 128, fp);
+			//parse plaintext
+			//find = sign
+			for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+			//plaintext starts 2 after the =
 			bufferPt += 2;
-		}
-		//next line
-		fgets(buffer, 128, fp);
-		//parse ciphertext
-		//find = sign
-		for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
-		//ciphertext starts 2 after the =
-		bufferPt += 2;
-		for (i = 0; i < 16; i ++){
-			sscanf(bufferPt, "%2hhx", &ciphertext[i]);
+			for (i = 0; i < 16; i ++){
+				sscanf(bufferPt, "%2hhx", &plaintext[i]);
+				bufferPt += 2;
+			}
+			//next line
+			fgets(buffer, 128, fp);
+			//parse ciphertext
+			//find = sign
+			for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+			//ciphertext starts 2 after the =
 			bufferPt += 2;
-		}
-		printf("Count = %u\n", count);
-		printf("Key = ");
-		for (i = 0; i < 16; i++){
-			printf("%02hhx", key[i]);
-		}
-		printf("\n");
-		printf("IV = ");
-		for (i = 0; i < 16; i++){
-			printf("%02hhx", iv[i]);
-		}
-		printf("\n");
-		printf("Plaintext = ");
-		for (i = 0; i < 16; i++){
-			printf("%02hhx", plaintext[i]);
-		}
-		printf("\n");
-		printf("Ciphertext = ");
-		for (i = 0; i < 16; i++){
-			printf("%02hhx", ciphertext[i]);
-		}
-		printf("\n");
+			for (i = 0; i < 16; i ++){
+				sscanf(bufferPt, "%2hhx", &ciphertext[i]);
+				bufferPt += 2;
+			}
+			printf("Stimulus: Count = %u\n", count);
+			printf("Stimulus: Key = ");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx", key[i]);
+			}
+			printf("\n");
+			printf("Stimulus: IV = ");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx", iv[i]);
+			}
+			printf("\n");
+			printf("Stimulus: Plaintext = ");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx", plaintext[i]);
+			}
+			printf("\n");
+			printf("Stimulus: Ciphertext = ");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx", ciphertext[i]);
+			}
+			printf("\n");
 
-		//send data out
-		blockOut.send(&plaintext[0], sizeof(unsigned char) * 16);
+			//send data out
+			blockOut.send(&plaintext[0], sizeof(unsigned char) * 16);
+		}
 	}
 };
