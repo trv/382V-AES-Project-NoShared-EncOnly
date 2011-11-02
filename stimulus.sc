@@ -5,13 +5,8 @@
 
 //Channels
 import "c_queue";
-//Modules
-import "byteSub128";
-import "mixColumns128";
-import "shiftRow128";
-import "addRoundKey128";
 
-behavior stimulus(i_sender blockOut) {
+behavior stimulus(i_sender blockOut, i_sender keyOut) {
 	void main (void){
 		FILE *fp;
 		char buffer[128];
@@ -99,6 +94,8 @@ behavior stimulus(i_sender blockOut) {
 
 			//send data out
 			blockOut.send(&plaintext[0], sizeof(unsigned char) * 16);
+			//send key out
+			keyOut.send(&key[0], sizeof(unsigned char) * 16);
 		}
 	}
 };
