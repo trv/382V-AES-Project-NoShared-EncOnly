@@ -1,4 +1,10 @@
+#define	DEBUG_BYTESUB 0
+
 import "c_queue";
+
+#if DEBUG_BYTESUB
+#include <stdio.h>
+#endif
 
 behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 	const unsigned char lookupTable[256] = {
@@ -23,11 +29,20 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 
 		void main (void) {
 			int i;
+#if DEBUG_BYTESUB
+			static int count = 0;
+#endif
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+#if DEBUG_BYTESUB
+			printf("Bytesub received block %u\n", ++count);
+#endif
 			for (i = 0; i < 16; i++){
 				block[i] = lookupTable[block[i]];
 			}
 			blockOut.send(&block[0], sizeof(unsigned char) * 16);
+#if DEBUG_BYTESUB
+			printf("Bytesub sent block %u\n", count);
+#endif
 		}
 };
 

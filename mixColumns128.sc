@@ -1,5 +1,11 @@
+#define DEBUG_MIX 0
+
 #include <stdio.h>
 #include <stdlib.h>
+
+#if DEBUG_MIX
+#include <stdio.h>
+#endif
 
 import "c_queue";
 
@@ -27,17 +33,25 @@ behavior MixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 
 
     void main(void) {
+#if DEBUG_MIX
+	static int count = 0;
+#endif
         unsigned char block[16];
         int i;
 
         QueueIn.receive(&block, sizeof(block)); 
-        
+#if DEBUG_MIX
+	printf("MixColumns received block %u\n", ++count);
+#endif
         for (i = 0; i < 4; i++) {
             mixColumn(block + (i*4));
         }
 
         QueueOut.send(&block, sizeof(block));
-        
+#if DEBUG_MIX
+	printf("MixColumns sent block %u\n", count);
+#endif
+
     }
 
 
