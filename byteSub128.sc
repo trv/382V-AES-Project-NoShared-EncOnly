@@ -1,4 +1,3 @@
-
 import "c_queue";
 
 behavior byteSub128(i_receiver blockIn, i_sender blockOut){

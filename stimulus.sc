@@ -3,8 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Channels
 import "c_queue";
+//Modules
 import "byteSub128";
+import "mixColumns128";
+import "shiftRow128";
+import "addRoundKey128";
 
 behavior stimulus(i_sender blockOut) {
 	void main (void){
