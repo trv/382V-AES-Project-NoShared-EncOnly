@@ -3,7 +3,7 @@
 
 import "c_queue";
 
-behavior MixColumns(i_receiver QueueIn, i_sender QueueOut) {
+behavior MixColumns128(i_receiver QueueIn, i_sender QueueOut) {
     
     void mixColumn(unsigned char *r) {
         unsigned char a[4];
