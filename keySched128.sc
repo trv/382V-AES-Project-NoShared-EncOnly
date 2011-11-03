@@ -60,7 +60,7 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 	void main (void){
 		unsigned char expandedKey[176];
 		unsigned char temp[4];
-		unsigned char i = 1;	//rcon index
+		unsigned char i = 0;	//rcon index
 		int c;		//key index
 		int j;		//generic loop index
 #if DEBUG_KEYSCHED
