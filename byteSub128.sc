@@ -30,7 +30,7 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 		void main (void) {
 			int i;
 #if DEBUG_BYTESUB
-			static int count = 0;
+			int count = 0;
 #endif
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_BYTESUB

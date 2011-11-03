@@ -1,4 +1,4 @@
-#define DEBUG_ADD 0
+#define DEBUG_ADD 1
 
 import "c_queue";
 #if DEBUG_ADD
@@ -6,13 +6,13 @@ import "c_queue";
 #endif
 
 behavior addRoundKey128(i_receiver blockIn, i_receiver keyIn, i_sender blockOut){
-	unsigned char block[16];
-	unsigned char key[16];
 
 	void main (void){
+		unsigned char block[16];
+		unsigned char key[16];
 #if DEBUG_ADD
-		static int countBlock = 0;
-		static int countKey = 0;
+		int countBlock = 0;
+		int countKey = 0;
 #endif
 		int i;
 		blockIn.receive(&block[0], sizeof(unsigned char) * 16);
@@ -30,6 +30,16 @@ behavior addRoundKey128(i_receiver blockIn, i_receiver keyIn, i_sender blockOut)
 		blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_ADD
 		printf("AddRoundKey send block %u\n", countBlock);
+		printf("AddRoundKey key data:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", key[i]);
+		}
+		printf("\n");
+		printf("AddRoundKey block data:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
+		}
+		printf("\n");
 #endif
 	}
 };

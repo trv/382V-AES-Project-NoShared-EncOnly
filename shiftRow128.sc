@@ -12,7 +12,7 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 	int i, j;
 	void main (void){
 #if DEBUG_SHIFT
-		static int count = 0;
+		int count = 0;
 #endif
 		blockIn.receive(&block[0][0], sizeof(unsigned char) * 16);
 #if DEBUG_SHIFT

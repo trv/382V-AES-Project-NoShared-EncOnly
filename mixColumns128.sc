@@ -9,7 +9,7 @@
 
 import "c_queue";
 
-behavior MixColumns128(i_receiver QueueIn, i_sender QueueOut) {
+behavior mixColumns128(i_receiver QueueIn, i_sender QueueOut) {
     
     void mixColumn(unsigned char *r) {
         unsigned char a[4];
@@ -34,7 +34,7 @@ behavior MixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 
     void main(void) {
 #if DEBUG_MIX
-	static int count = 0;
+	int count = 0;
 #endif
         unsigned char block[16];
         int i;
