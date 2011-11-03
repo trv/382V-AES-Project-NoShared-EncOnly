@@ -8,8 +8,8 @@ import "c_queue";
 
 behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 
-	//rotates in place 32 bits (in 4 unsigned chars) one byte	
-	void rotate (unsigned char * word32){
+	//rotateLefts in place 32 bits (in 4 unsigned chars) one byte	
+	void rotateLeft (unsigned char * word32){
 		unsigned char tempChar;
 		tempChar = word32[0];
 		word32[0] = word32[4];
@@ -33,10 +33,10 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 #if DEBUG_SHIFT
 		printf("ShiftRow received block %u\n", ++count);
 #endif
-		//rotate row j of block by j bytes 
+		//rotateLeft row j of block by j bytes 
 		for (i = 1; i < 4; i++){
 			for (j = i; j > 0; j--){
-				rotate(&block[i]);
+				rotateLeft(&block[i]);
 			}
 		}
 		blockOut.send(&block[0], sizeof(unsigned char) * 16);
