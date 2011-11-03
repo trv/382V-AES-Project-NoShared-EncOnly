@@ -5,7 +5,7 @@ import "c_queue";
 #include <stdio.h>
 #endif
 
-behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedKey2, i_sender expandedKey3, i_sender expandedKey4, i_sender expandedKey5, i_sender expandedKey6, i_sender expandedKey7, i_sender expandedKey8, i_sender expandedKey9, i_sender expandedKey10) {
+behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedKey2, i_sender expandedKey3, i_sender expandedKey4, i_sender expandedKey5, i_sender expandedKey6, i_sender expandedKey7, i_sender expandedKey8, i_sender expandedKey9, i_sender expandedKey10, i_sender expandedKey11) {
 	const unsigned char RconBox[15] = {
 		0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a};
 
@@ -138,6 +138,10 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 #endif
 		expandedKey10.send(&expandedKey[c], sizeof (unsigned char) * 16);
 		c+= 16;
+#if DEBUG_KEYSCHED
+		sendCount++;
+#endif
+		expandedKey11.send(&expandedKey[c], sizeof (unsigned char) * 16);
 #if DEBUG_KEYSCHED
 		sendCount++;
 #endif
