@@ -20,7 +20,7 @@ behavior Main (){
 	monitor monitor_inst(qOut);
 	
 	//AES Encryption Instance
-	AES128Enc aes_inst(qIn, qKey, qOut);
+	AES128Enc aes_enc_inst(qIn, qKey, qOut);
 
 	int main (void) {
 		par{
@@ -29,7 +29,7 @@ behavior Main (){
 			//monitor
 			monitor_inst;
 			//encryption
-			aes_inst;
+			aes_enc_inst;
 		}
 		return 0;
 	}
