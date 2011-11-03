@@ -1,4 +1,4 @@
-#define DEBUG_SHIFT 1
+#define DEBUG_SHIFT 0
 
 import "c_queue";
 
@@ -25,13 +25,13 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 		int count = 0;
 #endif
 		blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+#if DEBUG_SHIFT
+		printf("ShiftRow received block %u\n", ++count);
 		printf("ShiftRow block data received:\n");
 		for (i = 0; i < 16; i++){
 			printf("%02hhx ", block[i]);
 		}
 		printf("\n");
-#if DEBUG_SHIFT
-		printf("ShiftRow received block %u\n", ++count);
 #endif
 		//rotateLeft row j of block by j bytes 
 		for (i = 1; i < 4; i++){

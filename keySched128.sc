@@ -1,4 +1,4 @@
-#define DEBUG_KEYSCHED 1
+#define DEBUG_KEYSCHED 0
 
 import "c_queue";
 #if DEBUG_KEYSCHED
