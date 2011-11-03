@@ -1,4 +1,4 @@
-#define	DEBUG_BYTESUB 0
+#define	DEBUG_BYTESUB 1
 
 import "c_queue";
 
@@ -25,24 +25,33 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 			0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,
 			0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16};
 
+
+	void main (void) {
+		int i;
 		unsigned char block[16];
-
-		void main (void) {
-			int i;
 #if DEBUG_BYTESUB
-			int count = 0;
+		int count = 0;
 #endif
-			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
-#if DEBUG_BYTESUB
-			printf("Bytesub received block %u\n", ++count);
-#endif
-			for (i = 0; i < 16; i++){
-				block[i] = byteSubTable[block[i]];
-			}
-			blockOut.send(&block[0], sizeof(unsigned char) * 16);
-#if DEBUG_BYTESUB
-			printf("Bytesub sent block %u\n", count);
-#endif
+		blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+		printf("Bytesub block data received:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
 		}
+		printf("\n");
+#if DEBUG_BYTESUB
+		printf("Bytesub received block %u\n", ++count);
+#endif
+		for (i = 0; i < 16; i++){
+			block[i] = byteSubTable[block[i]];
+		}
+		blockOut.send(&block[0], sizeof(unsigned char) * 16);
+#if DEBUG_BYTESUB
+		printf("Bytesub sent block %u\n", count);
+		printf("Bytesub block data sent:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
+		}
+		printf("\n");
+#endif
+	}
 };
-
