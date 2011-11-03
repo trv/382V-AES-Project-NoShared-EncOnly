@@ -1,4 +1,4 @@
-#define DEBUG_SHIFT 0
+#define DEBUG_SHIFT 1
 
 import "c_queue";
 
@@ -7,26 +7,46 @@ import "c_queue";
 #endif
 
 behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
-	unsigned char block[4][4];
-	unsigned char blockShifted[4][4];
-	int i, j;
+
+	//rotates in place 32 bits (in 4 unsigned chars) one byte	
+	void rotate (unsigned char * word32){
+		unsigned char tempChar;
+		tempChar = word32[0];
+		word32[0] = word32[4];
+		word32[4] = word32[8];
+		word32[8] = word32[12];
+		word32[12] = tempChar;
+	}
+
 	void main (void){
+		unsigned char block[16];
+		int i, j;
 #if DEBUG_SHIFT
 		int count = 0;
 #endif
-		blockIn.receive(&block[0][0], sizeof(unsigned char) * 16);
+		blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+		printf("ShiftRow block data received:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
+		}
+		printf("\n");
 #if DEBUG_SHIFT
 		printf("ShiftRow received block %u\n", ++count);
 #endif
-		//shift row x of block by x bytes 
-		for (i = 0; i < 4; i++){
-			for (j = 0; j < 4; j++){
-				blockShifted[i][j] = block[i][(j+i) % 4];
+		//rotate row j of block by j bytes 
+		for (i = 1; i < 4; i++){
+			for (j = i; j > 0; j--){
+				rotate(&block[i]);
 			}
 		}
-		blockOut.send(&blockShifted[0][0], sizeof(unsigned char) * 16);
+		blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_SHIFT
 		printf("ShiftRow sent block %u\n", count);
+		printf("ShiftRow block data sent:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
+		}
+		printf("\n");
 #endif
 	}
 };
