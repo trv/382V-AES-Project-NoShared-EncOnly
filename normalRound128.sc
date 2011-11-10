@@ -25,5 +25,4 @@ behavior normalRound128 (i_receiver stateIn, i_receiver keyIn, i_sender stateOut
 			add_inst;
 		}
 	}
-
 };
