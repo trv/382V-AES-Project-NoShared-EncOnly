@@ -1,4 +1,4 @@
-#define	DEBUG_INVBYTESUB 1
+#define	DEBUG_INVBYTESUB 0
 
 import "c_queue";
 
