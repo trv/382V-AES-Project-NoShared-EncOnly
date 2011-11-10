@@ -1,4 +1,4 @@
-#define DEBUG_SHIFT 0
+#define DEBUG_SHIFT 1
 
 import "c_queue";
 

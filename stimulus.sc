@@ -94,7 +94,8 @@ behavior stimulus(i_sender blockOut, i_sender keyOut) {
 
 			//send data out
 			blockOut.send(&plaintext[0], sizeof(unsigned char) * 16);
-			//send key out
+			//send key out (once for encryption, once for decryption)
+			keyOut.send(&key[0], sizeof(unsigned char) * 16);
 			keyOut.send(&key[0], sizeof(unsigned char) * 16);
 		}
 	}

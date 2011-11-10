@@ -1,4 +1,4 @@
-#define DEBUG_MIX 0
+#define DEBUG_MIX 1
 
 #if DEBUG_MIX
 #include <stdio.h>
