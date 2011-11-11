@@ -24,29 +24,31 @@ behavior invShiftRow128(i_receiver blockIn, i_sender blockOut){
 #if DEBUG_INVSHIFT
 		int count = 0;
 #endif
-		blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+		for (;;) {
+			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVSHIFT
-		printf("InvShiftRow received block %u\n", ++count);
-		printf("InvShiftRow block data received:\n");
-		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block[i]);
-		}
-		printf("\n");
-#endif
-		//rotateRight row j of block by j bytes 
-		for (i = 1; i < 4; i++){
-			for (j = i; j > 0; j--){
-				rotateRight(&block[i]);
+			printf("InvShiftRow received block %u\n", ++count);
+			printf("InvShiftRow block data received:\n");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx ", block[i]);
 			}
-		}
-		blockOut.send(&block[0], sizeof(unsigned char) * 16);
-#if DEBUG_INVSHIFT
-		printf("InvShiftRow sent block %u\n", count);
-		printf("InvShiftRow block data sent:\n");
-		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block[i]);
-		}
-		printf("\n");
+			printf("\n");
 #endif
+			//rotateRight row j of block by j bytes 
+			for (i = 1; i < 4; i++){
+				for (j = i; j > 0; j--){
+					rotateRight(&block[i]);
+				}
+			}
+			blockOut.send(&block[0], sizeof(unsigned char) * 16);
+#if DEBUG_INVSHIFT
+			printf("InvShiftRow sent block %u\n", count);
+			printf("InvShiftRow block data sent:\n");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx ", block[i]);
+			}
+			printf("\n");
+#endif
+		}
 	}
 };

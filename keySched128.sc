@@ -73,57 +73,59 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 		int receiveCount = 0;
 		int sendCount = 0;
 #endif
-		keyIn.receive(&key[0], sizeof(unsigned char) * 16);
+		for (;;) {
+			keyIn.receive(&key[0], sizeof(unsigned char) * 16);
 #if DEBUG_KEYSCHED_2
-		printf("KeySched received key number %u\n", ++receiveCount);
+			printf("KeySched received key number %u\n", ++receiveCount);
 #endif
 #if DEBUG_KEYSCHED_3
-		printf("KeySched received key data:\n");
-		for (index = 0; index < 16; index++ ){
-			printf("%02hhx ", key[index]);
-		}
-		printf("\n");
+			printf("KeySched received key data:\n");
+			for (index = 0; index < 16; index++ ){
+				printf("%02hhx ", key[index]);
+			}
+			printf("\n");
 #endif
-		for (c = 16; c < 176;) {
-			for (j = 0; j < 4; j++){
-				temp[j] = key[j+c-4];
+			for (c = 16; c < 176;) {
+				for (j = 0; j < 4; j++){
+					temp[j] = key[j+c-4];
+				}
+				if (c % 16 == 0) {
+					core(temp, i);
+					i++;
+				}
+				for (j = 0; j < 4; j++){
+					key[c] = key[c-16] ^ temp[j];
+					c++;
+				}
 			}
-			if (c % 16 == 0) {
-				core(temp, i);
-				i++;
-			}
-			for (j = 0; j < 4; j++){
-				key[c] = key[c-16] ^ temp[j];
-				c++;
-			}
-		}
-		//send out 10 generated keys
-		c = 0;
-		expandedKey1.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey2.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey3.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey4.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey5.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey6.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey7.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey8.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey9.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey10.send(&key[c], sizeof (unsigned char) * 16);
-		c+= 16;
-		expandedKey11.send(&key[c], sizeof (unsigned char) * 16);
+			//send out 10 generated keys
+			c = 0;
+			expandedKey1.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey2.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey3.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey4.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey5.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey6.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey7.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey8.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey9.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey10.send(&key[c], sizeof (unsigned char) * 16);
+			c+= 16;
+			expandedKey11.send(&key[c], sizeof (unsigned char) * 16);
 #if DEBUG_KEYSCHED_4
-		sendCount += 11;
-		printf("KeySched sent key number up through %u\n", sendCount);
+			sendCount += 11;
+			printf("KeySched sent key number up through %u\n", sendCount);
 #endif
+		}
 	}
 
 };

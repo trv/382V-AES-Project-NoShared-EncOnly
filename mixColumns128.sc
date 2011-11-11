@@ -35,28 +35,29 @@ behavior mixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 #endif
         unsigned char block[16];
         int i;
-
-        QueueIn.receive(&block, sizeof(block)); 
+	for (;;) {
+		QueueIn.receive(&block, sizeof(block)); 
 #if DEBUG_MIX
-	printf("MixColumns received block %u\n", ++count);
-	printf("MixColumns block data received:\n");
-	for (i = 0; i < 16; i++){
-		printf("%02hhx ", block[i]);
-	}
-	printf("\n");
+		printf("MixColumns received block %u\n", ++count);
+		printf("MixColumns block data received:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
+		}
+		printf("\n");
 #endif
-        for (i = 0; i < 4; i++) {
-            mixColumn(block + (i*4));
-        }
+		for (i = 0; i < 4; i++) {
+		    mixColumn(block + (i*4));
+		}
 
-        QueueOut.send(&block, sizeof(block));
+		QueueOut.send(&block, sizeof(block));
 #if DEBUG_MIX
-	printf("MixColumns sent block %u\n", count);
-	printf("MixColumns block data sent:\n");
-	for (i = 0; i < 16; i++){
-		printf("%02hhx ", block[i]);
-	}
-	printf("\n");
+		printf("MixColumns sent block %u\n", count);
+		printf("MixColumns block data sent:\n");
+		for (i = 0; i < 16; i++){
+			printf("%02hhx ", block[i]);
+		}
+		printf("\n");
 #endif
+	}
     }
 };
