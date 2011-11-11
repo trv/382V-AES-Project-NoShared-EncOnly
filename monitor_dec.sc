@@ -1,25 +1,20 @@
-#define TEST_LENGTH 1
-
-#include <stdlib.h>
 #include <stdio.h>
 
 import "c_queue";
 
 
-behavior monitor(i_receiver blockIn){
+behavior monitor_dec(i_receiver blockIn, i_sender blockOut){
 	unsigned char block[16];
 	void main (void){
 		int i;
-		int j;
-		for (j = 0; i < TEST_LENGTH; j++){
+		for (;;){
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
-			printf("Monitor: Received text = ");
+			printf("Monitor Decrypt: Received plaintext = ");
 			for (i = 0; i < 16; i++){
 				printf("%02hhx", block[i]);
 			}
 			printf("\n");
+			blockOut.send(&block[0], sizeof(unsigned char) * 16);
 		}
-		exit(0);
 	}
-
 };
