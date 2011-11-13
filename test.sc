@@ -37,9 +37,9 @@ behavior Main (){
 			monitor_enc_inst;
 			monitor_dec_inst;
 			//encryption
-			aes_enc_inst;
+      aes_enc_inst;
 			//decryption
-			aes_dec_inst;
+      aes_dec_inst;
 		}
 		return 0;
 	}

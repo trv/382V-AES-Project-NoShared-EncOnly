@@ -24,7 +24,7 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 #if DEBUG_SHIFT
 		int count = 0;
 #endif
-		for (;;) {
+		//for (;;) {
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_SHIFT
 			printf("ShiftRow received block %u\n", ++count);
@@ -49,6 +49,6 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 			}
 			printf("\n");
 #endif
-		}
+		//}
 	}
 };

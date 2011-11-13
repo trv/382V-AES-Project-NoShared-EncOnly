@@ -32,20 +32,20 @@ behavior AES128Enc (i_receiver block, i_receiver key, i_sender cipherText){
 	finalRound128  final_inst10(q1011, qExpandedKey11, cipherText);
 
 	void main (void){
-		par{
+		fsm{
 			//key generator
-			key_inst;
-			first_inst1;
-			normal_inst2;
-			normal_inst3;
-			normal_inst4;
-			normal_inst5;
-			normal_inst6;
-			normal_inst7;
-			normal_inst8;
-			normal_inst9;
-			normal_inst10;
-			final_inst10;
+			key_inst : {goto first_inst1;}
+			first_inst1 : {goto normal_inst2;}
+			normal_inst2 : {goto normal_inst3;}
+			normal_inst3 : {goto normal_inst4;}
+			normal_inst4 : {goto normal_inst5;}
+			normal_inst5 : {goto normal_inst6;}
+			normal_inst6 : {goto normal_inst7;}
+			normal_inst7 : {goto normal_inst8;}
+			normal_inst8 : {goto normal_inst9;}
+			normal_inst9 : {goto normal_inst10;}
+			normal_inst10 : {goto final_inst10;}
+			final_inst10 : {goto key_inst;}
 		}
 	}
 };

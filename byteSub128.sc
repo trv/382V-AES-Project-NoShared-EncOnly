@@ -31,7 +31,7 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 #if DEBUG_BYTESUB
 		int count = 0;
 #endif
-		for (;;){
+		//for (;;){
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_BYTESUB
 			printf("Bytesub received block %u\n", ++count);
@@ -53,6 +53,6 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 			}
 			printf("\n");
 #endif
-		}
+		//}
 	}
 };

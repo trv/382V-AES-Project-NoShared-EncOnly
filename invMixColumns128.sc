@@ -98,7 +98,7 @@ behavior invMixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 #endif
         unsigned char block[16];
         int i;
-	for (;;) {
+	//for (;;) {
 		QueueIn.receive(&block, sizeof(block)); 
 #if DEBUG_INV_MIX
 		printf("InvMixColumns received block %u\n", ++count);
@@ -121,6 +121,6 @@ behavior invMixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 		}
 		printf("\n");
 #endif
-	}
+	//}
     }
 };
