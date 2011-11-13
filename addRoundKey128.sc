@@ -15,7 +15,7 @@ behavior addRoundKey128(i_receiver blockIn, i_receiver keyIn, i_sender blockOut)
 		int countKey = 0;
 #endif
 		int i;
-		for (;;){
+		//for (;;){
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_ADD
 			printf("AddRoundKey received block %u\n", ++countBlock);
@@ -42,6 +42,6 @@ behavior addRoundKey128(i_receiver blockIn, i_receiver keyIn, i_sender blockOut)
 			}
 			printf("\n");
 #endif
-		}
+		//}
 	}
 };

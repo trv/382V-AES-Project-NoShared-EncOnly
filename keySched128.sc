@@ -73,7 +73,7 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 		int receiveCount = 0;
 		int sendCount = 0;
 #endif
-		for (;;) {
+		//for (;;) {
 			keyIn.receive(&key[0], sizeof(unsigned char) * 16);
 #if DEBUG_KEYSCHED_2
 			printf("KeySched received key number %u\n", ++receiveCount);
@@ -125,7 +125,7 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 			sendCount += 11;
 			printf("KeySched sent key number up through %u\n", sendCount);
 #endif
-		}
+		//}
 	}
 
 };

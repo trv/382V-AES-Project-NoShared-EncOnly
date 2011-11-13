@@ -1,6 +1,7 @@
-#define DEBUG_STIM 0 
-#define TEST_LENGTH 2
-#define BYTE_SUB_VECTORS	"vectors/CBCGFSbox128.rsp"
+#define DEBUG_STIM 1
+#define DEBUG_STIM_IV 0
+#define TEST_LENGTH 1
+#define CBC_VECTORS	"vectors/CBCMCT128.rsp"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,15 +16,18 @@ behavior stimulus(i_sender encBlockOut, i_sender decBlockOut, i_sender keyEncOut
 		int count;
 		int i;
 		int j;
-		unsigned char key[16], iv[16], plaintext[16], ciphertext[16], temp[16];
+		int countIndex, mcIndexI, mcIndexJ;
+		unsigned char key[16], iv[16], plainText[16], cipherText[16], CT[16], chainVal[16], inputBlock[16], prevCT[16], temp[16];
 
-		fp = fopen(BYTE_SUB_VECTORS, "r");
+		fp = fopen(CBC_VECTORS, "r");
 		if (fp == NULL){
-			printf("Cannot open %s\n", BYTE_SUB_VECTORS);
+			printf("Cannot open %s\n", CBC_VECTORS);
 			exit(1);
 		}
-		//advance to the first "COUNT" in the file
-		for (j = 0; j < TEST_LENGTH; j++){
+		//Cipher Block Chaining Test
+		printf("Beginning CBC Monte Carlo test\n");
+		for (countIndex = 0; countIndex < TEST_LENGTH; countIndex++){
+			//advance to the next "C" in the file
 			for (fgets(buffer, 128, fp); buffer[0] != 'C'; fgets(buffer, 128, fp)) {}
 			//parse the count number
 			sscanf(buffer, "COUNT = %u", &count);
@@ -51,24 +55,24 @@ behavior stimulus(i_sender encBlockOut, i_sender decBlockOut, i_sender keyEncOut
 			}
 			//next line
 			fgets(buffer, 128, fp);
-			//parse plaintext
+			//parse plainText
 			//find = sign
 			for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
-			//plaintext starts 2 after the =
+			//plainText starts 2 after the =
 			bufferPt += 2;
 			for (i = 0; i < 16; i ++){
-				sscanf(bufferPt, "%2hhx", &plaintext[i]);
+				sscanf(bufferPt, "%2hhx", &plainText[i]);
 				bufferPt += 2;
 			}
 			//next line
 			fgets(buffer, 128, fp);
-			//parse ciphertext
+			//parse cipherText
 			//find = sign
 			for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
-			//ciphertext starts 2 after the =
+			//cipherText starts 2 after the =
 			bufferPt += 2;
 			for (i = 0; i < 16; i ++){
-				sscanf(bufferPt, "%2hhx", &ciphertext[i]);
+				sscanf(bufferPt, "%2hhx", &cipherText[i]);
 				bufferPt += 2;
 			}
 			printf("Stimulus: Count = %u\n", count);
@@ -84,44 +88,113 @@ behavior stimulus(i_sender encBlockOut, i_sender decBlockOut, i_sender keyEncOut
 			printf("\n");
 			printf("Stimulus: Plaintext = ");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx", plaintext[i]);
+				printf("%02hhx", plainText[i]);
 			}
 			printf("\n");
 			printf("Stimulus: Ciphertext = ");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx", ciphertext[i]);
+				printf("%02hhx", cipherText[i]);
 			}
 			printf("\n");
-
-			//send out encryption data
-			encBlockOut.send(&plaintext[0], sizeof(unsigned char) * 16);
-#if DEBUG_STIM
-			printf("Stimulus: Sent data to encrypt\n");
-#endif
-			keyEncOut.send(&key[0], sizeof(unsigned char) * 16);
-#if DEBUG_STIM
-			printf("Stimulus: Sent key to encrypt\n");
-#endif
-			//get back encrypted data
-			encBlockIn.receive(&temp[0], sizeof(unsigned char) * 16);
-#if DEBUG_STIM
-			printf("Stimulus: Received encrypted data\n");
-#endif
-			//send out dectyption data
-			decBlockOut.send(&temp[0], sizeof(unsigned char) * 16);
-#if DEBUG_STIM
-			printf("Stimulus: Sent data to decrypt\n");
-#endif
+#if DEBUG_STIM_IV
+			//decode the IV for debug
+			decBlockOut.send(&iv[0], sizeof(unsigned char) * 16);
 			keyDecOut.send(&key[0], sizeof(unsigned char) * 16);
-#if DEBUG_STIM
-			printf("Stimulus: Sent key to decrypt\n");
-#endif
-			//get back decrypted data
 			decBlockIn.receive(&temp[0], sizeof(unsigned char) * 16);
-#if DEBUG_STIM
-			printf("Stimulus: Received decrypted data\n");
+			printf("Stimulus: decoded IV = ");
+			for (i = 0; i < 16; i++){
+				printf("%02hhx", temp[i]);
+			}
+			printf("\n");
 #endif
+			for (mcIndexI = 0; mcIndexI < 100; mcIndexI++){
+				for (mcIndexJ = 0; mcIndexJ < 1000; mcIndexJ++){
+					if (mcIndexJ == 0) {
+						//CT(j) = AES(key(i), IV(i), PT(i))
+						//plaintext = plaintext xor init vector
+						for (i = 0; i < 16; i++){
+							inputBlock[i] = iv[i] ^ plainText[i];
+						}
+#if DEBUG_STIM
+						printf("Stimulus: Ptext (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", plainText[i]);
+						}
+						printf("\n");
+						printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", inputBlock[i]);
+						}
+						printf("\n");
+#endif
+						encBlockOut.send(&inputBlock[0], sizeof(unsigned char) * 16);
+						keyEncOut.send(&key[0], sizeof(unsigned char) * 16);
+						encBlockIn.receive(&CT[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: Ctext (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", CT[i]);
+						}
+						printf("\n");
+#endif
+						//PT(j+1) = IV(i)
+						for(i = 0; i<16; i++){
+							plainText[i] = iv[i];
+						}
+					} else {
+						//CT(j) = AES(Key(i), PT(i)
+						//plaintext = plaintext xor prev ciphertext
+						for (i = 0; i < 16; i++){
+							inputBlock[i] = plainText[i] ^ CT[i];
+						}
+#if DEBUG_STIM
+						printf("Stimulus: Ptext (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", plainText[i]);
+						}
+						printf("\n");
+						printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", inputBlock[i]);
+						}
+						printf("\n");
+#endif
+						encBlockOut.send(&inputBlock[0], sizeof(unsigned char) * 16);
+						keyEncOut.send(&key[0], sizeof(unsigned char) * 16);
+						encBlockIn.receive(&CT[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: Ctext (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", CT[i]);
+						}
+						printf("\n");
+#endif
+						//PT(i+1) = CT(j-1)
+						for (i = 0; i < 16; i++){
+							plainText[i] = prevCT[i];
+							prevCT[i] = CT[i];
+						}
+					}
+				}
+				//TODO key manipulation
+			}
 		}
+		/*
+		//send out dectyption data
+		decBlockOut.send(&CT[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+		printf("Stimulus: Sent data to decrypt\n");
+#endif
+		keyDecOut.send(&key[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+		printf("Stimulus: Sent key to decrypt\n");
+#endif
+		//get back decrypted data
+		decBlockIn.receive(&CT[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+		printf("Stimulus: Received decrypted data\n");
+#endif
+		*/
 		exit(0);
 	}
 };
