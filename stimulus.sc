@@ -1,4 +1,4 @@
-#define DEBUG_STIM 0
+#define DEBUG_STIM 0 
 #define TEST_LENGTH 2
 #define BYTE_SUB_VECTORS	"vectors/CBCGFSbox128.rsp"
 #include <stdio.h>
