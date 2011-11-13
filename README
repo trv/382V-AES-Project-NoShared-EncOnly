@@ -1,1 +1,5 @@
-use "make test" to run a test against known test vectors
+use "make test > trace" to run a test and dump the output to a text file
+	currently(Nov 13), the test tries to run against the NIST CBC Monte Carlo test vectors.
+	The first round runs and has been verified against the intermediate values supplied.
+	After the first round, things start to go wrong for unknown reasons.
+use "make clean" to clear out compiled files
