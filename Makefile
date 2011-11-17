@@ -1,15 +1,14 @@
 CC = scc
 RM = rm -f
 
-SCFILES = \
-
 COPTS = 	-g -vv -ww
+COPTSFAST = 	-vv -ww -O
 
 MAINFILE = 	test
 
 EXEFILE = 	./test
 
-all: 	$(SCFILES) $(HFILES)
+all: 	
 	$(CC) $(MAINFILE) $(COPTS)
 
 clean:
@@ -18,3 +17,10 @@ clean:
 
 test:	all
 	$(EXEFILE) 
+
+testfast:
+	$(CC) $(MAINFILE) $(COPTSFAST)
+	$(EXEFILE)
+
+cleansir:
+	$(RM) *.sir

@@ -1,5 +1,7 @@
 use "make test > trace" to run a test and dump the output to a text file
+use "make testfast > trace" to turn on optimizations and turn off compiler debug
 	currently(Nov 13), the test tries to run against the NIST CBC Monte Carlo test vectors.
 	The first round runs and has been verified against the intermediate values supplied.
 	After the first round, things start to go wrong for unknown reasons.
 use "make clean" to clear out compiled files
+use "make cleansir" to clear out all .sir files
