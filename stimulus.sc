@@ -1,4 +1,4 @@
-#define DEBUG_STIM 1
+#define DEBUG_STIM 0
 #define DEBUG_STIM_IV 0
 #define TEST_LENGTH 1
 #define CBC_VECTORS	"vectors/CBCMCT128.rsp"
@@ -10,6 +10,27 @@ import "i_receiver";
 import "i_sender";
 
 behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sender qLengthOut, i_sender qIVOut, i_receiver qMonFeedback) {
+
+	bool checkBlock(unsigned char * golden, unsigned char * check, int length){
+		int i;
+		for (i = 0; i < length; i++){
+			if (golden[i] != check[i]) return false;
+		}
+		return true;
+	}
+
+	void printBlock(unsigned char * text, int length){
+		int i;
+		for (i = 0; i < length; i++){
+			printf("%02hhx", text[i]);
+		}
+	}
+
+	void printBlockLn(unsigned char * text, int length){
+			printBlock(text, length);
+			printf("\n");
+	}
+
 	void main (void){
 		FILE *fp;
 		char buffer[128];
@@ -67,40 +88,24 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 				}
 				printf("Stimulus: Count = %u\n", count);
 				printf("Stimulus: Key = ");
-				for (i = 0; i < 16; i++){
-					printf("%02hhx", key[i]);
-				}
-				printf("\n");
+				printBlockLn(key, 16);
 				printf("Stimulus: Plaintext = ");
-				for (i = 0; i < 16; i++){
-					printf("%02hhx", plainText[i]);
-				}
-				printf("\n");
+				printBlockLn(plainText, 16);
 				printf("Stimulus: Ciphertext = ");
-				for (i = 0; i < 16; i++){
-					printf("%02hhx", cipherText[i]);
-				}
-				printf("\n");
+				printBlockLn(cipherText, 16);
 				
 				mode = 1;
 				length = 1;
 
 				for (mcIndexI = 0; mcIndexI < 100; mcIndexI++){
-#if DEBUG_STIM
 					printf("Stimulus:key (i=%u) = ", mcIndexI);
-					for (i = 0; i < 16; i++){
-						printf("%02hhx", key[i]);
-					}
-					printf("\n");
-#endif
-					//TODO output PT[0]
+					printBlockLn(key, 16);
+					printf("Stimulus:PT (i=%u) = ", mcIndexI);
+					printBlockLn(plainText, 16);
 					for (mcIndexJ = 0; mcIndexJ < 1000; mcIndexJ++){
 #if DEBUG_STIM
 						printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
-						for (i = 0; i < 16; i++){
-							printf("%02hhx", plainText[i]);
-						}
-						printf("\n");
+						printBlockLn(plainText, 16);
 #endif
 						qModeOut.send(&mode, sizeof(unsigned char));
 #if DEBUG_STIM
@@ -125,6 +130,11 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 						//next plaintext is current ciphertext
 						for (i = 0; i < 16; i++){plainText[i] = CT[i];}
 					}
+					//output CT
+					printf("Stimulus:CT (i=%u) = ", mcIndexI);
+					printBlockLn(CT, 16);
+					//key = key xor CT
+					for (i = 0; i < 16; i++){key[i] = key[i] ^ CT[i];}
 				}
 			}
 		}
