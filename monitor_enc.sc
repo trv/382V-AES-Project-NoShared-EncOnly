@@ -7,10 +7,12 @@
 import "c_queue";
 
 behavior monitor_enc(i_receiver blockIn, i_sender blockOut){
-	unsigned char block[16];
 	void main (void){
+		unsigned char block[16];
+#if DEBUG_MON_ENC
 		int i;
 		unsigned long count;
+#endif
 		for (;;){
 			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_MON_ENC
