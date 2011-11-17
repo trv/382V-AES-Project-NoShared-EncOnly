@@ -47,7 +47,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		if (fp == NULL){
 			printf("Cannot open %s\n", ECB_VECTORS);
 		} else {
-			printf("Beginning ECB Monte Carlo test\n");
+			printf("Beginning ECB Monte Carlo Encryption test\n");
 			for (countIndex = 0; countIndex < TEST_LENGTH; countIndex++){
 				//advance to the next "C" in the file
 				for (fgets(buffer, 128, fp); buffer[0] != 'C'; fgets(buffer, 128, fp)) {}
@@ -86,6 +86,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 					sscanf(bufferPt, "%2hhx", &cipherText[i]);
 					bufferPt += 2;
 				}
+#if DEBUG_STIM
 				printf("Stimulus: Count = %u\n", count);
 				printf("Stimulus: Key = ");
 				printBlockLn(key, 16);
@@ -93,14 +94,16 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 				printBlockLn(plainText, 16);
 				printf("Stimulus: Ciphertext = ");
 				printBlockLn(cipherText, 16);
-				
+#endif				
 				mode = 1;
 				length = 1;
-
+				
+				printf("[ENCRYPT]\n\n");
 				for (mcIndexI = 0; mcIndexI < 100; mcIndexI++){
-					printf("Stimulus:key (i=%u) = ", mcIndexI);
+					printf("COUNT = %u\n", mcIndexI);
+					printf("KEY = ");
 					printBlockLn(key, 16);
-					printf("Stimulus:PT (i=%u) = ", mcIndexI);
+					printf("PLAINTEXT = ");
 					printBlockLn(plainText, 16);
 					for (mcIndexJ = 0; mcIndexJ < 1000; mcIndexJ++){
 #if DEBUG_STIM
@@ -131,8 +134,9 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 						for (i = 0; i < 16; i++){plainText[i] = CT[i];}
 					}
 					//output CT
-					printf("Stimulus:CT (i=%u) = ", mcIndexI);
+					printf("CIPHERTEXT = ");
 					printBlockLn(CT, 16);
+					printf("\n");
 					//key = key xor CT
 					for (i = 0; i < 16; i++){key[i] = key[i] ^ CT[i];}
 				}
