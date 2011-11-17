@@ -31,7 +31,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 			printf("\n");
 	}
 
-	void main (void){
+	void runECBMCT(void){
 		FILE *fp;
 		char buffer[128];
 		char * bufferPt;
@@ -39,10 +39,8 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		unsigned long length;
 		unsigned char mode;
 		int i;
-		int j;
 		int countIndex, mcIndexI, mcIndexJ;
-		unsigned char key[16], iv[16], plainText[16], cipherText[16], CT[16], chainVal[16], inputBlock[16], prevCT[16], temp[16];
-		
+		unsigned char key[16], plainText[16], cipherText[16], CT[16];
 		fp = fopen(ECB_VECTORS, "r");
 		if (fp == NULL){
 			printf("Cannot open %s\n", ECB_VECTORS);
@@ -142,6 +140,10 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 				}
 			}
 		}
+	}
+
+	void main (void){
+		runECBMCT();
 								
 		/*
 		fp = fopen(CBC_VECTORS, "r");
