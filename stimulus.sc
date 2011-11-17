@@ -31,7 +31,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 			printf("\n");
 	}
 
-	void runECBMCT(void){
+	void runECBMCTEnc(void){
 		FILE *fp;
 		char buffer[128];
 		char * bufferPt;
@@ -142,8 +142,122 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		}
 	}
 
+	void runECBMCTDec(){
+		FILE *fp;
+		char buffer[128];
+		char * bufferPt;
+		int count;
+		unsigned long length;
+		unsigned char mode;
+		int i;
+		int countIndex, mcIndexI, mcIndexJ;
+		unsigned char key[16], plainText[16], cipherText[16], CT[16], PT[16];
+		fp = fopen(ECB_VECTORS, "r");
+		if (fp == NULL){
+			printf("Cannot open %s\n", ECB_VECTORS);
+		} else {
+			printf("Beginning ECB Monte Carlo Decryption test\n");
+			for (countIndex = 0; countIndex < TEST_LENGTH; countIndex++){
+				//advance to the "[DECRYPT]" in the file
+				for (fgets(buffer, 128, fp); buffer[0] != '[' || buffer[1] != 'D' ; fgets(buffer, 128, fp)) {}
+				//advance to the next "C" in the file
+				for (fgets(buffer, 128, fp); buffer[0] != 'C'; fgets(buffer, 128, fp)) {}
+				//parse the count number
+				sscanf(buffer, "COUNT = %u", &count);
+				//next line
+				fgets(buffer, 128, fp);
+				//parse key
+				//find = sign
+				for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+				//key starts 2 after the =
+				bufferPt += 2;
+				for (i = 0; i < 16; i ++){
+					sscanf(bufferPt, "%2hhx", &key[i]);
+					bufferPt += 2;
+				}
+				//next line
+				fgets(buffer, 128, fp);
+				//parse cipherText
+				//find = sign
+				for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+				//ciphertext starts 2 after the =
+				bufferPt += 2;
+				for (i = 0; i < 16; i ++){
+					sscanf(bufferPt, "%2hhx", &cipherText[i]);
+					bufferPt += 2;
+				}
+				//next line
+				fgets(buffer, 128, fp);
+				//parse plainText
+				//find = sign
+				for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+				//cipherText starts 2 after the =
+				bufferPt += 2;
+				for (i = 0; i < 16; i ++){
+					sscanf(bufferPt, "%2hhx", &plainText[i]);
+					bufferPt += 2;
+				}
+#if DEBUG_STIM
+				printf("Stimulus: Count = %u\n", count);
+				printf("Stimulus: Key = ");
+				printBlockLn(key, 16);
+				printf("Stimulus: Ciphertext = ");
+				printBlockLn(cipherText, 16);
+				printf("Stimulus: Plaintext = ");
+				printBlockLn(plainText, 16);
+#endif				
+				mode = 2;
+				length = 1;
+				
+				printf("[DECRYPT]\n\n");
+				for (mcIndexI = 0; mcIndexI < 100; mcIndexI++){
+					printf("COUNT = %u\n", mcIndexI);
+					printf("KEY = ");
+					printBlockLn(key, 16);
+					printf("CIPHERTEXT = ");
+					printBlockLn(cipherText, 16);
+					for (mcIndexJ = 0; mcIndexJ < 1000; mcIndexJ++){
+#if DEBUG_STIM
+						printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
+						printBlockLn(cipherText, 16);
+#endif
+						qModeOut.send(&mode, sizeof(unsigned char));
+#if DEBUG_STIM
+						printf("Stimulus: sent mode.\n");
+#endif
+						qKeyOut.send(&key[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: sent key.\n");
+#endif
+						qBlockOut.send(&cipherText[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: sent ciphertext.\n");
+#endif
+						qLengthOut.send(&length, sizeof(unsigned long));
+#if DEBUG_STIM
+						printf("Stimulus: sent length.\n");
+#endif
+						qMonFeedback.receive(&PT[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: received plaintext from monitor.\n");
+#endif
+						//next plaintext is current ciphertext
+						for (i = 0; i < 16; i++){cipherText[i] = PT[i];}
+					}
+					//output CT
+					printf("PLAINTEXT = ");
+					printBlockLn(PT, 16);
+					printf("\n");
+					//key = key xor CT
+					for (i = 0; i < 16; i++){key[i] = key[i] ^ PT[i];}
+				}
+			}
+		}
+	}
+
 	void main (void){
-		runECBMCT();
+		runECBMCTEnc();
+		runECBMCTDec();
 								
 		/*
 		fp = fopen(CBC_VECTORS, "r");

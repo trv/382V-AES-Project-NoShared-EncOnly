@@ -1,6 +1,7 @@
 #define DEBUG_CONTROLLER 0
 
-#define	MODE_ECB_DEC	1
+#define	MODE_ECB_ENC	1
+#define MODE_ECB_DEC	2
 
 import "i_receiver";
 import "i_sender";
@@ -45,7 +46,7 @@ behavior controller(	i_receiver modeIn, i_receiver keyIn, i_receiver IVIn, i_rec
 			printf(" received key.\n");
 #endif
 			switch (mode) {
-			case MODE_ECB_DEC: 
+			case MODE_ECB_ENC: 
 				for (i = 0; i < length; i++){
 					//data to process
 					streamIn.receive(&PT[0], sizeof(unsigned char) * 16);
@@ -55,6 +56,20 @@ behavior controller(	i_receiver modeIn, i_receiver keyIn, i_receiver IVIn, i_rec
 					IBEncOut.send(&PT[0], sizeof(unsigned char) * 16);
 					//receive from encryption
 					OBEncIn.receive(&CT[0], sizeof(unsigned char) * 16);
+					//return encrypted data
+					streamOut.send(&CT[0], sizeof(unsigned char) * 16);
+				}
+				break;
+			case MODE_ECB_DEC:
+				for (i = 0; i < length; i++){
+					//data to process
+					streamIn.receive(&PT[0], sizeof(unsigned char) * 16);
+					//key to use
+					keyDecOut.send(&key[0], sizeof(unsigned char) * 16);
+					//send to encryption
+					IBDecOut.send(&PT[0], sizeof(unsigned char) * 16);
+					//receive from encryption
+					OBDecIn.receive(&CT[0], sizeof(unsigned char) * 16);
 					//return encrypted data
 					streamOut.send(&CT[0], sizeof(unsigned char) * 16);
 				}

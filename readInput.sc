@@ -37,7 +37,7 @@ behavior readInput(i_receiver qData, i_receiver qKey, i_receiver qLength, i_rece
 #if DEBUG_READ
 			printf(" received key.\n");
 #endif
-			if (mode != 1){
+			if ((mode != 1) && (mode != 2)){
 #if DEBUG_READ 
 				printf("Read: Waiting to receive IV ...");
 #endif
@@ -64,7 +64,7 @@ behavior readInput(i_receiver qData, i_receiver qKey, i_receiver qLength, i_rece
 #if DEBUG_READ
 			printf(" mode ");
 #endif
-			if (mode != 1) {
+			if ((mode != 1) && (mode != 2)) {
 				qIVOut.send(&IV[0], sizeof(unsigned char) * 16);
 #if DEBUG_READ
 				printf(" IV ");
