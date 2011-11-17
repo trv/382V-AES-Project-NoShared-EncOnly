@@ -14,26 +14,24 @@ behavior Main (){
 	const unsigned long qSize = 1024;
 	
 	//queues between instances
-	c_queue qEnc(qSize), qDec(qSize), qEncOut(qSize), qDecOut(qSize), qEncKey(qSize), qDecKey(qSize);
-	c_queue qEncMonStim(qSize), qDecMonStim(qSize);
+	c_queue qDataStimDes(qSize), qKeyStimDes(qSize), qModeStimDes(qSize), qLengthStimDes(qSize), qIVStimDes(qSize), qBlockDesMon(qSize);
+	c_queue qBlockMonStim(qSize);
 
 	//stimulus and monitor instances
-	stimulus stim_inst(qEnc, qDec, qEncKey, qDecKey, qEncMonStim, qDecMonStim);
-	monitor_enc monitor_enc_inst(qEncOut, qEncMonStim);
-	monitor_dec monitor_dec_inst(qDecOut, qDecMonStim);
+	stimulus stim_inst(qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockMonStim);
+	monitor_enc monitor_inst(qBlockDesMon, qBlockMonStim);
 	
-    Design design_inst(qEnc, qEncKey, qEncOut, qDec, qDecKey, qDecOut);
+	Design design_inst(qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockDesMon);
 
 	int main (void) {
 		par{
 			//stimulus
 			stim_inst;
 			//monitor
-			monitor_enc_inst;
-			monitor_dec_inst;
-		    // runs both AES128Enc and AES128Dec in parallel
-            design_inst;
-        }
+			monitor_inst;
+			// runs both AES128Enc and AES128Dec in parallel
+			design_inst;
+	        }
 		return 0;
 	}
 };

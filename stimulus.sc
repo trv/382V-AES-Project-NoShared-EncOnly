@@ -2,23 +2,134 @@
 #define DEBUG_STIM_IV 0
 #define TEST_LENGTH 1
 #define CBC_VECTORS	"vectors/CBCMCT128.rsp"
+#define ECB_VECTORS	"vectors/ECBMCT128.rsp"
 #include <stdio.h>
 #include <stdlib.h>
 
-//Channels
-import "c_queue";
+import "i_receiver";
+import "i_sender";
 
-behavior stimulus(i_sender encBlockOut, i_sender decBlockOut, i_sender keyEncOut, i_sender keyDecOut, i_receiver encBlockIn, i_receiver decBlockIn) {
+behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sender qLengthOut, i_sender qIVOut, i_receiver qMonFeedback) {
 	void main (void){
 		FILE *fp;
 		char buffer[128];
 		char * bufferPt;
 		int count;
+		unsigned long length;
+		unsigned char mode;
 		int i;
 		int j;
 		int countIndex, mcIndexI, mcIndexJ;
 		unsigned char key[16], iv[16], plainText[16], cipherText[16], CT[16], chainVal[16], inputBlock[16], prevCT[16], temp[16];
+		
+		fp = fopen(ECB_VECTORS, "r");
+		if (fp == NULL){
+			printf("Cannot open %s\n", ECB_VECTORS);
+		} else {
+			printf("Beginning ECB Monte Carlo test\n");
+			for (countIndex = 0; countIndex < TEST_LENGTH; countIndex++){
+				//advance to the next "C" in the file
+				for (fgets(buffer, 128, fp); buffer[0] != 'C'; fgets(buffer, 128, fp)) {}
+				//parse the count number
+				sscanf(buffer, "COUNT = %u", &count);
+				//next line
+				fgets(buffer, 128, fp);
+				//parse key
+				//find = sign
+				for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+				//key starts 2 after the =
+				bufferPt += 2;
+				for (i = 0; i < 16; i ++){
+					sscanf(bufferPt, "%2hhx", &key[i]);
+					bufferPt += 2;
+				}
+				//next line
+				fgets(buffer, 128, fp);
+				//parse plainText
+				//find = sign
+				for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+				//plainText starts 2 after the =
+				bufferPt += 2;
+				for (i = 0; i < 16; i ++){
+					sscanf(bufferPt, "%2hhx", &plainText[i]);
+					bufferPt += 2;
+				}
+				//next line
+				fgets(buffer, 128, fp);
+				//parse cipherText
+				//find = sign
+				for(bufferPt = &buffer[0]; *bufferPt != '='; bufferPt++){}
+				//cipherText starts 2 after the =
+				bufferPt += 2;
+				for (i = 0; i < 16; i ++){
+					sscanf(bufferPt, "%2hhx", &cipherText[i]);
+					bufferPt += 2;
+				}
+				printf("Stimulus: Count = %u\n", count);
+				printf("Stimulus: Key = ");
+				for (i = 0; i < 16; i++){
+					printf("%02hhx", key[i]);
+				}
+				printf("\n");
+				printf("Stimulus: Plaintext = ");
+				for (i = 0; i < 16; i++){
+					printf("%02hhx", plainText[i]);
+				}
+				printf("\n");
+				printf("Stimulus: Ciphertext = ");
+				for (i = 0; i < 16; i++){
+					printf("%02hhx", cipherText[i]);
+				}
+				printf("\n");
+				
+				mode = 1;
+				length = 1;
 
+				for (mcIndexI = 0; mcIndexI < 100; mcIndexI++){
+#if DEBUG_STIM
+					printf("Stimulus:key (i=%u) = ", mcIndexI);
+					for (i = 0; i < 16; i++){
+						printf("%02hhx", key[i]);
+					}
+					printf("\n");
+#endif
+					//TODO output PT[0]
+					for (mcIndexJ = 0; mcIndexJ < 1000; mcIndexJ++){
+#if DEBUG_STIM
+						printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
+						for (i = 0; i < 16; i++){
+							printf("%02hhx", plainText[i]);
+						}
+						printf("\n");
+#endif
+						qModeOut.send(&mode, sizeof(unsigned char));
+#if DEBUG_STIM
+						printf("Stimulus: sent mode.\n");
+#endif
+						qKeyOut.send(&key[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: sent key.\n");
+#endif
+						qBlockOut.send(&plainText[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: sent plaintext.\n");
+#endif
+						qLengthOut.send(&length, sizeof(unsigned long));
+#if DEBUG_STIM
+						printf("Stimulus: sent length.\n");
+#endif
+						qMonFeedback.receive(&CT[0], sizeof(unsigned char) * 16);
+#if DEBUG_STIM
+						printf("Stimulus: received ciphertext from monitor.\n");
+#endif
+						//next plaintext is current ciphertext
+						for (i = 0; i < 16; i++){plainText[i] = CT[i];}
+					}
+				}
+			}
+		}
+								
+		/*
 		fp = fopen(CBC_VECTORS, "r");
 		if (fp == NULL){
 			printf("Cannot open %s\n", CBC_VECTORS);
@@ -179,8 +290,10 @@ behavior stimulus(i_sender encBlockOut, i_sender decBlockOut, i_sender keyEncOut
 				//TODO key manipulation
 			}
 		}
+		*/
+
 		/*
-		//send out dectyption data
+		//send out decryption data
 		decBlockOut.send(&CT[0], sizeof(unsigned char) * 16);
 #if DEBUG_STIM
 		printf("Stimulus: Sent data to decrypt\n");
