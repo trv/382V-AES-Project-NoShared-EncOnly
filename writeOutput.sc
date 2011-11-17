@@ -1,7 +1,7 @@
 import "i_receiver";
 import "i_sender";
 
-behavior Write(i_receiver q, i_sender qOut) {
+behavior writeOutput(i_receiver q, i_sender qOut) {
    
    unsigned char block[16];
     
@@ -11,6 +11,4 @@ behavior Write(i_receiver q, i_sender qOut) {
             qOut.send(&block[0], (sizeof(unsigned char) * 16));
         }
     }
-
-
 };

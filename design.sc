@@ -4,8 +4,8 @@ import "c_queue";
 import "controller";
 import "AES128Enc";
 import "AES128Dec";
-import "read";
-import "write";
+import "readInput";
+import "writeOutput";
 
 behavior Design(i_receiver qDataIn, i_receiver qKeyIn, i_receiver qModeIn, i_receiver qLengthIn, i_receiver qIVIn, i_sender dataOut) {
 
@@ -16,13 +16,13 @@ behavior Design(i_receiver qDataIn, i_receiver qKeyIn, i_receiver qModeIn, i_rec
 	c_queue qBlockContWrite(size);
 
 	//software interface for input to this design
-	Read read_inst(qDataIn, qKeyIn, qLengthIn, qModeIn, qIVIn, qDataReadCont, qKeyReadCont, qIVReadCont, qLengthReadCont, qModeReadCont);
+	readInput read_inst(qDataIn, qKeyIn, qLengthIn, qModeIn, qIVIn, qDataReadCont, qKeyReadCont, qIVReadCont, qLengthReadCont, qModeReadCont);
 	
 	//controls the different block modes
 	controller control_inst(qModeReadCont, qKeyReadCont, qIVReadCont, qDataReadCont, qLengthReadCont, qKeyContEnc, qBlockContEnc, qKeyContDec, qBlockContDec, qBlockEncCont, qBlockDecCont, qBlockContWrite);
 	
 	//software interface for output from this design
-	Write write_inst(qBlockContWrite, dataOut);
+	writeOutput write_inst(qBlockContWrite, dataOut);
 
 	//AES Encryption Instance
 	AES128Enc aes_enc_inst(qBlockContEnc, qKeyContEnc, qBlockEncCont);

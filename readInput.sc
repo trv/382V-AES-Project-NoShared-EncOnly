@@ -7,7 +7,7 @@ import "i_sender";
 #include <stdio.h>
 #endif
 
-behavior Read(i_receiver qData, i_receiver qKey, i_receiver qLength, i_receiver qMode, i_receiver qIV, i_sender qDataOut, i_sender qKeyOut, i_sender qIVOut, i_sender qLengthOut, i_sender qModeOut) {
+behavior readInput(i_receiver qData, i_receiver qKey, i_receiver qLength, i_receiver qMode, i_receiver qIV, i_sender qDataOut, i_sender qKeyOut, i_sender qIVOut, i_sender qLengthOut, i_sender qModeOut) {
 	unsigned long length, i;
 	unsigned char mode;
 	unsigned char key[16];
