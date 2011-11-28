@@ -4,9 +4,11 @@
 #include <stdio.h>
 #endif
 
+#include "shared.h"
 import "c_queue";
 
-behavior mixColumns128(i_receiver QueueIn, i_sender QueueOut) {
+behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
+//i_receiver QueueIn, i_sender QueueOut) {
     
     void mixColumn(unsigned char *r) {
         unsigned char a[4];
@@ -31,30 +33,35 @@ behavior mixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 
     void main(void) {
 #if DEBUG_MIX
-	int count = 0;
+	    int count = 0;
 #endif
-        unsigned char block[16];
-        int i;
-	//for (;;) {
-		QueueIn.receive(&block, sizeof(block)); 
+      //unsigned char block[16];
+      int i;
+		//QueueIn.receive(&block, sizeof(block)); 
 #if DEBUG_MIX
 		printf("MixColumns received block %u\n", ++count);
 		printf("MixColumns block data received:\n");
 		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block[i]);
+		//	printf("%02hhx ", block[i]);
 		}
 		printf("\n");
 #endif
-		for (i = 0; i < 4; i++) {
-		    mixColumn(block + (i*4));
-		}
 
-		QueueOut.send(&block, sizeof(block));
+    if (isEncode) {
+  		for (i = 0; i < 4; i++) {
+	  	    mixColumn(enc_block + (i*4));
+		  }
+    } else {
+  		for (i = 0; i < 4; i++) {
+	  	    mixColumn(dec_block + (i*4));
+      }
+    }
+		//QueueOut.send(&block, sizeof(block));
 #if DEBUG_MIX
 		printf("MixColumns sent block %u\n", count);
 		printf("MixColumns block data sent:\n");
 		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block[i]);
+		//	printf("%02hhx ", block[i]);
 		}
 		printf("\n");
 #endif

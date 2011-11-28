@@ -1,12 +1,14 @@
 #define DEBUG_SHIFT 0
 
+#include "shared.h"
 import "c_queue";
 
 #if DEBUG_SHIFT
 #include <stdio.h>
 #endif
 
-behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
+behavior shiftRow128( in unsigned char round, in unsigned char isEncode) {
+//i_receiver blockIn, i_sender blockOut){
 
 	//rotateLefts in place 32 bits (in 4 unsigned chars) one byte	
 	void rotateLeft (unsigned char * word32){
@@ -19,33 +21,43 @@ behavior shiftRow128(i_receiver blockIn, i_sender blockOut){
 	}
 
 	void main (void){
-		unsigned char block[16];
+		//unsigned char block[16];
 		int i, j;
 #if DEBUG_SHIFT
 		int count = 0;
 #endif
 		//for (;;) {
-			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_SHIFT
 			printf("ShiftRow received block %u\n", ++count);
 			printf("ShiftRow block data received:\n");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx ", block[i]);
+				//printf("%02hhx ", block[i]);
 			}
 			printf("\n");
 #endif
+
 			//rotateLeft row j of block by j bytes 
-			for (i = 1; i < 4; i++){
-				for (j = i; j > 0; j--){
-					rotateLeft(&block[i]);
-				}
-			}
-			blockOut.send(&block[0], sizeof(unsigned char) * 16);
+      if (isEncode) {
+        for (i = 1; i < 4; i++){
+          for (j = i; j > 0; j--){
+            rotateLeft(&enc_block[i]);
+          }
+        }
+      } else {
+        for (i = 1; i < 4; i++){
+          for (j = i; j > 0; j--){
+            rotateLeft(&dec_block[i]);
+          }
+        }
+      }
+
+			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_SHIFT
 			printf("ShiftRow sent block %u\n", count);
 			printf("ShiftRow block data sent:\n");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx ", block[i]);
+			//	printf("%02hhx ", block[i]);
 			}
 			printf("\n");
 #endif
