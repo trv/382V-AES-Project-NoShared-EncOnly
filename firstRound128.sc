@@ -2,13 +2,14 @@ import "c_queue";
 
 import "addRoundKey128";
 
-behavior firstRound128(i_receiver stateIn, i_receiver roundKeyIn, i_sender stateOut){
+behavior firstRound128( in unsigned char round, in unsigned char isEncode ) {
+//i_receiver stateIn, i_receiver roundKeyIn, i_sender stateOut){
 	
-	addRoundKey128 add_inst(stateIn, roundKeyIn, stateOut);
+	addRoundKey128 add_inst(round, isEncode); //stateIn, roundKeyIn, stateOut);
 
 	void main (void){
-		par{
-			add_inst;
+    fsm{
+			add_inst : {break;}
 		}
 	}
 

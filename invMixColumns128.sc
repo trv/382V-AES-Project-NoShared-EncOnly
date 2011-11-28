@@ -4,9 +4,11 @@
 #include <stdio.h>
 #endif
 
+#include "shared.h"
 import "c_queue";
 
-behavior invMixColumns128(i_receiver QueueIn, i_sender QueueOut) {
+behavior invMixColumns128(unsigned char round, unsigned char isEncode) {
+//i_receiver QueueIn, i_sender QueueOut) {
 
 	const unsigned char lookupGmul14[256] = {
 		0x00,0x0e,0x1c,0x12,0x38,0x36,0x24,0x2a,0x70,0x7e,0x6c,0x62,0x48,0x46,0x54,0x5a,
@@ -92,32 +94,32 @@ behavior invMixColumns128(i_receiver QueueIn, i_sender QueueOut) {
 	}
 
 
-    void main(void) {
+  void main(void) {
 #if DEBUG_INV_MIX
-	int count = 0;
+  	int count = 0;
 #endif
-        unsigned char block[16];
-        int i;
+    //unsigned char block[16];
+    int i;
 	//for (;;) {
-		QueueIn.receive(&block, sizeof(block)); 
+		//QueueIn.receive(&block, sizeof(block)); 
 #if DEBUG_INV_MIX
 		printf("InvMixColumns received block %u\n", ++count);
 		printf("InvMixColumns block data received:\n");
 		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block[i]);
+		//	printf("%02hhx ", block[i]);
 		}
 		printf("\n");
 #endif
 		for (i = 0; i < 4; i++) {
-		    invMixColumn(block + (i*4));
+		  invMixColumn(dec_block + (i*4));
 		}
 
-		QueueOut.send(&block, sizeof(block));
+		//QueueOut.send(&block, sizeof(block));
 #if DEBUG_INV_MIX
 		printf("InvMixColumns sent block %u\n", count);
 		printf("InvMixColumns block data sent:\n");
 		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block[i]);
+		//	printf("%02hhx ", block[i]);
 		}
 		printf("\n");
 #endif

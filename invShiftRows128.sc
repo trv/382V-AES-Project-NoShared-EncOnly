@@ -1,12 +1,14 @@
 #define DEBUG_INVSHIFT 0
 
+#include "shared.h"
 import "c_queue";
 
 #if DEBUG_INVSHIFT
 #include <stdio.h>
 #endif
 
-behavior invShiftRow128(i_receiver blockIn, i_sender blockOut){
+behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
+//i_receiver blockIn, i_sender blockOut){
 
 	//rotateRights in place 32 bits (in 4 unsigned chars) one byte	
 	void rotateRight (unsigned char * word32){
@@ -19,33 +21,33 @@ behavior invShiftRow128(i_receiver blockIn, i_sender blockOut){
 	}
 
 	void main (void){
-		unsigned char block[16];
+		//unsigned char block[16];
 		int i, j;
 #if DEBUG_INVSHIFT
 		int count = 0;
 #endif
 		//for (;;) {
-			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow received block %u\n", ++count);
 			printf("InvShiftRow block data received:\n");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx ", block[i]);
+			//	printf("%02hhx ", block[i]);
 			}
 			printf("\n");
 #endif
 			//rotateRight row j of block by j bytes 
 			for (i = 1; i < 4; i++){
 				for (j = i; j > 0; j--){
-					rotateRight(&block[i]);
+					rotateRight(&dec_block[i]);
 				}
 			}
-			blockOut.send(&block[0], sizeof(unsigned char) * 16);
+			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow sent block %u\n", count);
 			printf("InvShiftRow block data sent:\n");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx ", block[i]);
+			//	printf("%02hhx ", block[i]);
 			}
 			printf("\n");
 #endif

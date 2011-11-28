@@ -8,9 +8,11 @@
 #include <stdio.h>
 #endif
 
+#include "shared.h"
 import "c_queue";
 
-behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedKey2, i_sender expandedKey3, i_sender expandedKey4, i_sender expandedKey5, i_sender expandedKey6, i_sender expandedKey7, i_sender expandedKey8, i_sender expandedKey9, i_sender expandedKey10, i_sender expandedKey11) {
+behavior keySched128( in unsigned char isEncode ) {
+//inout unsigned char key[176], i_sender expandedKey1, i_sender expandedKey2, i_sender expandedKey3, i_sender expandedKey4, i_sender expandedKey5, i_sender expandedKey6, i_sender expandedKey7, i_sender expandedKey8, i_sender expandedKey9, i_sender expandedKey10, i_sender expandedKey11) {
 	const unsigned char RconBox[15] = {
 		0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a};
 
@@ -63,7 +65,7 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 	}
 
 	void main (void){
-		unsigned char key[176];
+		//unsigned char key[176];
 		unsigned char temp[4];
 		unsigned char i = 0;	//rcon index
 		int c;		//key index
@@ -74,7 +76,7 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 		int sendCount = 0;
 #endif
 		//for (;;) {
-			keyIn.receive(&key[0], sizeof(unsigned char) * 16);
+			//keyIn.receive(&key[0], sizeof(unsigned char) * 16);
 #if DEBUG_KEYSCHED_2
 			printf("KeySched received key number %u\n", ++receiveCount);
 #endif
@@ -85,20 +87,36 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 			}
 			printf("\n");
 #endif
+    if (isEncode) {
 			for (c = 16; c < 176;) {
 				for (j = 0; j < 4; j++){
-					temp[j] = key[j+c-4];
+					temp[j] = enc_key[j+c-4];
 				}
 				if (c % 16 == 0) {
 					core(temp, i);
 					i++;
 				}
 				for (j = 0; j < 4; j++){
-					key[c] = key[c-16] ^ temp[j];
+					enc_key[c] = enc_key[c-16] ^ temp[j];
 					c++;
 				}
 			}
-			//send out 10 generated keys
+    } else {
+			for (c = 16; c < 176;) {
+				for (j = 0; j < 4; j++){
+					temp[j] = dec_key[j+c-4];
+				}
+				if (c % 16 == 0) {
+					core(temp, i);
+					i++;
+				}
+				for (j = 0; j < 4; j++){
+					dec_key[c] = dec_key[c-16] ^ temp[j];
+					c++;
+				}
+			}
+    }	
+/*			//send out 10 generated keys
 			c = 0;
 			expandedKey1.send(&key[c], sizeof (unsigned char) * 16);
 			c+= 16;
@@ -121,6 +139,7 @@ behavior keySched128(i_receiver keyIn, i_sender expandedKey1, i_sender expandedK
 			expandedKey10.send(&key[c], sizeof (unsigned char) * 16);
 			c+= 16;
 			expandedKey11.send(&key[c], sizeof (unsigned char) * 16);
+*/
 #if DEBUG_KEYSCHED_4
 			sendCount += 11;
 			printf("KeySched sent key number up through %u\n", sendCount);

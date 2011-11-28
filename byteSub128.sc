@@ -1,12 +1,15 @@
 #define	DEBUG_BYTESUB 0
 
+#include "shared.h"
 import "c_queue";
 
 #if DEBUG_BYTESUB
 #include <stdio.h>
 #endif
 
-behavior byteSub128(i_receiver blockIn, i_sender blockOut){
+behavior byteSub128( in unsigned char round, in unsigned char isEncode ) {
+//i_receiver blockIn, i_sender blockOut){
+
 	const unsigned char byteSubTable[256] = {
 		0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
 		0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
@@ -27,12 +30,12 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 
 	void main (void) {
 		int i;
-		unsigned char block[16];
+		//unsigned char block[16];
 #if DEBUG_BYTESUB
 		int count = 0;
 #endif
 		//for (;;){
-			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_BYTESUB
 			printf("Bytesub received block %u\n", ++count);
 			printf("Bytesub block data received:\n");
@@ -41,10 +44,16 @@ behavior byteSub128(i_receiver blockIn, i_sender blockOut){
 			}
 			printf("\n");
 #endif
-			for (i = 0; i < 16; i++){
-				block[i] = byteSubTable[block[i]];
-			}
-			blockOut.send(&block[0], sizeof(unsigned char) * 16);
+      if (isEncode) {
+  			for (i = 0; i < 16; i++){
+	  			enc_block[i] = byteSubTable[enc_block[i]];
+		  	}
+      } else {
+  			for (i = 0; i < 16; i++){
+	  			dec_block[i] = byteSubTable[dec_block[i]];
+		  	}
+      }
+			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_BYTESUB
 			printf("Bytesub sent block %u\n", count);
 			printf("Bytesub block data sent:\n");

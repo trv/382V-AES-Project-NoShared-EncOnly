@@ -1,14 +1,17 @@
 #define	DEBUG_INVBYTESUB 0
 
+#include "shared.h"
 import "c_queue";
 
 #if DEBUG_INVBYTESUB
 #include <stdio.h>
 #endif
 
-behavior invByteSub128(i_receiver blockIn, i_sender blockOut){
-		const unsigned char invByteSubTable[256] = {
-			0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
+behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
+//i_receiver blockIn, i_sender blockOut){
+
+	const unsigned char invByteSubTable[256] = {
+		0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
 		0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87, 0x34, 0x8E, 0x43, 0x44, 0xC4, 0xDE, 0xE9, 0xCB,
 		0x54, 0x7B, 0x94, 0x32, 0xA6, 0xC2, 0x23, 0x3D, 0xEE, 0x4C, 0x95, 0x0B, 0x42, 0xFA, 0xC3, 0x4E,
 		0x08, 0x2E, 0xA1, 0x66, 0x28, 0xD9, 0x24, 0xB2, 0x76, 0x5B, 0xA2, 0x49, 0x6D, 0x8B, 0xD1, 0x25,
@@ -27,29 +30,32 @@ behavior invByteSub128(i_receiver blockIn, i_sender blockOut){
 
 	void main (void) {
 		int i;
-		unsigned char block[16];
+		//unsigned char block[16];
 #if DEBUG_INVBYTESUB
 		int count = 0;
 #endif
 		//for (;;) {
-			blockIn.receive(&block[0], sizeof(unsigned char) * 16);
+			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVBYTESUB
 			printf("InvBytesub received block %u\n", ++count);
 			printf("InvBytesub block data received:\n");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx ", block[i]);
+			//	printf("%02hhx ", block[i]);
 			}
 			printf("\n");
 #endif
+
+
 			for (i = 0; i < 16; i++){
-				block[i] = invByteSubTable[block[i]];
+				dec_block[i] = invByteSubTable[dec_block[i]];
 			}
-			blockOut.send(&block[0], sizeof(unsigned char) * 16);
+
+			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVBYTESUB
 			printf("InvBytesub sent block %u\n", count);
 			printf("InvBytesub block data sent:\n");
 			for (i = 0; i < 16; i++){
-				printf("%02hhx ", block[i]);
+			//	printf("%02hhx ", block[i]);
 			}
 			printf("\n");
 #endif
