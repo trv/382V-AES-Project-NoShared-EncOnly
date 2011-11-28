@@ -20,11 +20,11 @@ behavior invNormalRound128 ( unsigned char round, unsigned char isEncode) {
 	addRoundKey128 add_inst(round, isEncode); //queueByteAdd, keyIn, queueAddMix);
 
 	void main (void){
-//		par{
-			add_inst;
-			invmix_inst;
-			invshift_inst;
-			invbyte_inst;
-//		}
+		fsm {
+			add_inst : {goto invmix_inst;}
+			invmix_inst : {goto invshift_inst;}
+			invshift_inst : {goto invbyte_inst;}
+			invbyte_inst : {break;}
+		}
 	}
 };

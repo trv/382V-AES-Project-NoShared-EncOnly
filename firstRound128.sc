@@ -8,9 +8,9 @@ behavior firstRound128( in unsigned char round, in unsigned char isEncode ) {
 	addRoundKey128 add_inst(round, isEncode); //stateIn, roundKeyIn, stateOut);
 
 	void main (void){
-    //par{
-			add_inst;
-		//}
+    fsm{
+			add_inst : {break;}
+		}
 	}
 
 };

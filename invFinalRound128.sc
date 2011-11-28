@@ -17,10 +17,10 @@ behavior invFinalRound128( unsigned char round, unsigned char isEncode) {
 	addRoundKey128 add_inst(round, isEncode); //queueByteAdd, keyIn, stateOut);
 
 	void main (void){
-//		par{
-			add_inst;
-			invshift_inst;
-			invbyte_inst;
-//		}
+		fsm {
+			add_inst : {goto invshift_inst;}
+			invshift_inst : {goto invbyte_inst;}
+			invbyte_inst : {break;}
+		}
 	}
 };

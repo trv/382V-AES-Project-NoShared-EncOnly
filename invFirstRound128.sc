@@ -11,9 +11,9 @@ behavior invFirstRound128( unsigned char round, unsigned char isEncode) {
 	addRoundKey128 add_inst(round, isEncode); //stateIn, roundKeyIn, stateOut);
 
 	void main (void){
-//		par{
-			add_inst;
-//		}
+		fsm {
+			add_inst : {break;}
+		}
 	}
 
 };

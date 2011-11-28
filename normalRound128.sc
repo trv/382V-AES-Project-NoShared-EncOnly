@@ -19,11 +19,11 @@ behavior normalRound128 ( in unsigned char round, in unsigned char isEncode ) {
 	addRoundKey128 add_inst(round, isEncode); //queueMixAdd, keyIn, stateOut);
 
 	void main (void){
-//		par{  // run these sequentially now
-			byte_inst;
-			shift_inst;
-			mix_inst;
-			add_inst;
-//		}
+		fsm {  // run these sequentially now
+			byte_inst : {goto shift_inst;}
+			shift_inst : {goto mix_inst;}
+			mix_inst : {goto add_inst;}
+			add_inst : {break;}
+		}
 	}
 };

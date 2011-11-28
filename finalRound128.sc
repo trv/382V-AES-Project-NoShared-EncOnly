@@ -13,10 +13,10 @@ behavior finalRound128( in unsigned char round, in unsigned char isEncode ) {
 	addRoundKey128 add_inst(round, isEncode); //queueShiftAdd, keyIn, stateOut);
 
 	void main (void){
-//		par{
-			byte_inst;
-			shift_inst;
-			add_inst;
-//		}
+		fsm {
+			byte_inst : {goto shift_inst;}
+			shift_inst : {goto add_inst;}
+			add_inst : {break;}
+		}
 	}
 };
