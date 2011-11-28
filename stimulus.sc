@@ -1,4 +1,4 @@
-#define DEBUG_STIM 1
+#define DEBUG_STIM 0
 #define DEBUG_STIM_IV 0
 #define CBC_VECTORS	"vectors/CBCMCT128.rsp"
 #define ECB_VECTORS	"vectors/ECBMCT128.rsp"
@@ -48,7 +48,9 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		if (fp == NULL){
 			printf("Cannot open %s\n", ECB_VECTORS);
 		} else {
+#if DEBUG_STIM
 			printf("Beginning ECB Monte Carlo Encryption test\n");
+#endif
 			//advance to the next "C" in the file
 			for (fgets(buffer, 128, fp); buffer[0] != 'C'; fgets(buffer, 128, fp)) {}
 			//parse the count number
@@ -157,7 +159,9 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		if (fp == NULL){
 			printf("Cannot open %s\n", ECB_VECTORS);
 		} else {
+#if DEBUG_STIM
 			printf("Beginning ECB Monte Carlo Decryption test\n");
+#endif
 			//advance to the "[DECRYPT]" in the file
 			for (fgets(buffer, 128, fp); buffer[0] != '[' || buffer[1] != 'D' ; fgets(buffer, 128, fp)) {}
 			//advance to the next "C" in the file
