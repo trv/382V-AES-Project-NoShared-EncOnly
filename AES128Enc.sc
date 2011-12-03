@@ -15,7 +15,7 @@ import "writeBlock128";
 unsigned char enc_block[16];
 unsigned char enc_key[176];
 
-behavior AES128Enc (){
+behavior AES128Enc {
   unsigned char isEncode = (unsigned char) 1;
   unsigned char round0 = (unsigned char) 0;
   unsigned char round1 = (unsigned char) 1;

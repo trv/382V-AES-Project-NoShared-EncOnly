@@ -1,11 +1,8 @@
 #define DEBUG_DESIGN 0
 
-import "c_queue";
 import "controller";
 import "AES128Enc";
 import "AES128Dec";
-import "readInput";
-import "writeOutput";
 
 #include "topShared.h"
 
@@ -16,10 +13,10 @@ behavior Design(in unsigned char mode) {
   controllerOut control_out_inst(mode);
 
 	//AES Encryption Instance
-	AES128Enc aes_enc_inst(qBlockContEnc, qKeyContEnc, qBlockEncCont);
+	AES128Enc aes_enc_inst;
 
 	//AES Decryption Instance
-	AES128Dec aes_dec_inst(qBlockContDec, qKeyContDec, qBlockDecCont);
+	AES128Dec aes_dec_inst;
 
 	void main(void) {
 		fsm {

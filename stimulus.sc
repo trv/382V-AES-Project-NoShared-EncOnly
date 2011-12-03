@@ -35,7 +35,7 @@ behavior stimulus(inout unsigned char iter, out unsigned char mode) {
 			printBlock(text, length);
 			printf("\n");
 	}
-
+/*
 	void runECBMCTEnc(void){
 		FILE *fp;
 		char buffer[128];
@@ -309,6 +309,7 @@ behavior stimulus(inout unsigned char iter, out unsigned char mode) {
 		
 	}
 
+*/
 	void main (void){
 		/*FILE *  fp;
 		FILE * ifp;

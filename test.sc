@@ -29,7 +29,7 @@ behavior Main (){
 	//stimulus and monitor instances
 	stimulus stim_inst(iter, mode);
 //qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockMonStim);
-	monitor_enc monitor_inst(qBlockDesMon, qBlockMonStim);
+	//monitor_enc monitor_inst(qBlockDesMon, qBlockMonStim);
 	
 	Design design_inst(mode);
 
