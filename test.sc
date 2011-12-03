@@ -10,28 +10,38 @@ import "design";
 #include <stdio.h>
 #endif
 
+unsigned char input_block[16];
+unsigned char IV_block[16];
+unsigned char input_key[16];
+unsigned char output_block[16];
+
 behavior Main (){
-	const unsigned long qSize = 1024;
+
+  unsigned char mode;
+  unsigned char iter = 0;
+
+	//const unsigned long qSize = 1024;
 	
 	//queues between instances
-	c_queue qDataStimDes(qSize), qKeyStimDes(qSize), qModeStimDes(qSize), qLengthStimDes(qSize), qIVStimDes(qSize), qBlockDesMon(qSize);
-	c_queue qBlockMonStim(qSize);
+	//c_queue qDataStimDes(qSize), qKeyStimDes(qSize), qModeStimDes(qSize), qLengthStimDes(qSize), qIVStimDes(qSize), qBlockDesMon(qSize);
+	//c_queue qBlockMonStim(qSize);
 
 	//stimulus and monitor instances
-	stimulus stim_inst(qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockMonStim);
+	stimulus stim_inst(iter, mode);
+//qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockMonStim);
 	monitor_enc monitor_inst(qBlockDesMon, qBlockMonStim);
 	
-	Design design_inst(qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockDesMon);
+	Design design_inst(mode);
 
 	int main (void) {
-		par{
+		fsm{
 			//stimulus
-			stim_inst;
+			stim_inst: {goto design_inst;}
 			//monitor
-			monitor_inst;
+			//monitor_inst;
 			// runs both AES128Enc and AES128Dec in parallel
-			design_inst;
-	        }
+			design_inst: {goto stim_inst;}
+    }
 		return 0;
 	}
 };

@@ -15,7 +15,7 @@ import "writeBlock128";
 unsigned char dec_block[16];
 unsigned char dec_key[176];
 
-behavior AES128Dec (i_receiver block, i_receiver qkey, i_sender plainText){
+behavior AES128Dec (){
   unsigned char isEncode = (unsigned char) 0;
   unsigned char round0 = (unsigned char) 0;
   unsigned char round1 = (unsigned char) 1;
@@ -28,10 +28,6 @@ behavior AES128Dec (i_receiver block, i_receiver qkey, i_sender plainText){
   unsigned char round8 = (unsigned char) 8;
   unsigned char round9 = (unsigned char) 9;
   unsigned char round10 = (unsigned char) 10;
-
-  readKey128 readKey_inst(qkey, isEncode);
-  readBlock128 readBlock_inst(block, isEncode);
-  writeBlock128 writeBlock_inst(plainText, isEncode);
 
 	//key scheduler instance
 	keySched128 key_inst( isEncode );  
@@ -51,8 +47,6 @@ behavior AES128Dec (i_receiver block, i_receiver qkey, i_sender plainText){
 
 	void main (void){
 		fsm{
-			readBlock_inst : {goto readKey_inst;}
-			readKey_inst : {goto key_inst;}
 			key_inst : {goto invfirst_inst1;}
 			invfirst_inst1 : {goto invnormal_inst2;}
 			invnormal_inst2 : {goto invnormal_inst3;}
@@ -64,8 +58,7 @@ behavior AES128Dec (i_receiver block, i_receiver qkey, i_sender plainText){
 			invnormal_inst8 : {goto invnormal_inst9;}
 			invnormal_inst9 : {goto invnormal_inst10;}
 			invnormal_inst10 : {goto invfinal_inst10;}
-			invfinal_inst10 : {goto writeBlock_inst;}
-			writeBlock_inst : {goto readBlock_inst;}
+			invfinal_inst10 : {break;}
 		}
 	}
 };
