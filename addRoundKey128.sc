@@ -9,17 +9,13 @@ import "c_queue";
 // `round` is the current round so we know what part of the key to use, starting with round 0
 // `isEncode` is 1 if we're using enc_*, or 0 if we're using dec_*
 behavior addRoundKey128( in unsigned char round, in unsigned char isEncode ) { 
-//i_receiver blockIn, i_receiver keyIn, i_sender blockOut){
 
 	void main (void){
-		//unsigned char block[16];
-		//unsigned char key[16];
 #if DEBUG_ADD
 		int countBlock = 0;
 		int countKey = 0;
 #endif
 		int i;
-    //blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_ADD
     //printf("AddRoundKey received block %u\n", ++countBlock);
 #endif
@@ -42,7 +38,6 @@ behavior addRoundKey128( in unsigned char round, in unsigned char isEncode ) {
     }
 
 
-//    blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_ADD
     printf("AddRoundKey send block %u\n", countBlock);
     printf("AddRoundKey key data:\n");

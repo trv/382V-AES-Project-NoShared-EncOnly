@@ -30,12 +30,9 @@ behavior byteSub128( in unsigned char round, in unsigned char isEncode ) {
 
 	void main (void) {
 		int i;
-		//unsigned char block[16];
 #if DEBUG_BYTESUB
 		int count = 0;
 #endif
-		//for (;;){
-			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_BYTESUB
 			printf("Bytesub received block %u\n", ++count);
 			printf("Bytesub block data received:\n");
@@ -53,7 +50,6 @@ behavior byteSub128( in unsigned char round, in unsigned char isEncode ) {
 	  			dec_block[i] = byteSubTable[dec_block[i]];
 		  	}
       }
-			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_BYTESUB
 			printf("Bytesub sent block %u\n", count);
 			printf("Bytesub block data sent:\n");
@@ -62,6 +58,5 @@ behavior byteSub128( in unsigned char round, in unsigned char isEncode ) {
 			}
 			printf("\n");
 #endif
-		//}
 	}
 };

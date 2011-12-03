@@ -8,7 +8,6 @@
 import "c_queue";
 
 behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
-//i_receiver QueueIn, i_sender QueueOut) {
     
     void mixColumn(unsigned char *r) {
         unsigned char a[4];
@@ -35,9 +34,7 @@ behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
 #if DEBUG_MIX
 	    int count = 0;
 #endif
-      //unsigned char block[16];
       int i;
-		//QueueIn.receive(&block, sizeof(block)); 
 #if DEBUG_MIX
 		printf("MixColumns received block %u\n", ++count);
 		printf("MixColumns block data received:\n");
@@ -56,7 +53,6 @@ behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
 	  	    mixColumn(dec_block + (i*4));
       }
     }
-		//QueueOut.send(&block, sizeof(block));
 #if DEBUG_MIX
 		printf("MixColumns sent block %u\n", count);
 		printf("MixColumns block data sent:\n");
@@ -65,6 +61,5 @@ behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
 		}
 		printf("\n");
 #endif
-	//}
     }
 };
