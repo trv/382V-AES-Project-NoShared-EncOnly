@@ -7,22 +7,13 @@ import "AES128Dec";
 import "readInput";
 import "writeOutput";
 
-behavior Design(i_receiver qDataIn, i_receiver qKeyIn, i_receiver qModeIn, i_receiver qLengthIn, i_receiver qIVIn, i_sender dataOut) {
+#include "topShared.h"
 
-	const unsigned long size = 1024;
-	c_queue qDataReadCont(size), qKeyReadCont(size), qLengthReadCont(size), qModeReadCont(size), qIVReadCont(size);
-	c_queue qKeyContEnc(size), qBlockContEnc(size), qKeyContDec(size), qBlockContDec(size);
-	c_queue qBlockEncCont(size), qBlockDecCont(size);
-	c_queue qBlockContWrite(size);
+behavior Design(in unsigned char mode) {
 
-	//software interface for input to this design
-	readInput read_inst(qDataIn, qKeyIn, qLengthIn, qModeIn, qIVIn, qDataReadCont, qKeyReadCont, qIVReadCont, qLengthReadCont, qModeReadCont);
-	
 	//controls the different block modes
-	controller control_inst(qModeReadCont, qKeyReadCont, qIVReadCont, qDataReadCont, qLengthReadCont, qKeyContEnc, qBlockContEnc, qKeyContDec, qBlockContDec, qBlockEncCont, qBlockDecCont, qBlockContWrite);
-	
-	//software interface for output from this design
-	writeOutput write_inst(qBlockContWrite, dataOut);
+	controllerIn control_in_inst(mode);
+  controllerOut control_out_inst(mode);
 
 	//AES Encryption Instance
 	AES128Enc aes_enc_inst(qBlockContEnc, qKeyContEnc, qBlockEncCont);
@@ -31,12 +22,12 @@ behavior Design(i_receiver qDataIn, i_receiver qKeyIn, i_receiver qModeIn, i_rec
 	AES128Dec aes_dec_inst(qBlockContDec, qKeyContDec, qBlockDecCont);
 
 	void main(void) {
-		par {
-			read_inst;
-			aes_enc_inst;
-			write_inst;
-			control_inst;
-			aes_dec_inst;
+		fsm {
+			control_in_inst: {if (mode == MODE_ECB_ENC) goto aes_enc_inst;
+                        if (mode == MODE_ECB_DEC) goto aes_dec_inst;}
+			aes_enc_inst: {goto control_out_inst;}
+			aes_dec_inst: {goto control_out_inst;}
+      control_out_inst: {break;}
 		}
 	}
 };
