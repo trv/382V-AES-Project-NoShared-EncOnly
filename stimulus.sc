@@ -12,7 +12,9 @@
 import "i_receiver";
 import "i_sender";
 
-behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sender qLengthOut, i_sender qIVOut, i_receiver qMonFeedback) {
+#include "topShared.h"
+
+behavior stimulus(inout unsigned char iter, out unsigned char mode) {
 
 	bool checkBlock(unsigned char * golden, unsigned char * check, int length){
 		int i;
@@ -40,7 +42,6 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		char * bufferPt;
 		int count;
 		unsigned long length;
-		unsigned char mode;
 		int i;
 		int mcIndexI, mcIndexJ;
 		unsigned char key[16], plainText[16], cipherText[16], CT[16];
@@ -112,9 +113,9 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 					printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
 					printBlockLn(plainText, 16);
 #endif
-					qModeOut.send(&mode, sizeof(unsigned char));
+					//qModeOut.send(&mode, sizeof(unsigned char));
 #if DEBUG_STIM
-					printf("Stimulus: sent mode.\n");
+					//printf("Stimulus: sent mode.\n");
 #endif
 					qKeyOut.send(&key[0], sizeof(unsigned char) * 16);
 #if DEBUG_STIM
@@ -151,7 +152,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		char * bufferPt;
 		int count;
 		unsigned long length;
-		unsigned char mode;
+		//unsigned char mode;
 		int i;
 		int mcIndexI, mcIndexJ;
 		unsigned char key[16], plainText[16], cipherText[16], PT[16];
@@ -225,9 +226,9 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 					printf("Stimulus:Iblock (j=%u) = ", mcIndexJ);
 					printBlockLn(cipherText, 16);
 #endif
-					qModeOut.send(&mode, sizeof(unsigned char));
+					//qModeOut.send(&mode, sizeof(unsigned char));
 #if DEBUG_STIM
-					printf("Stimulus: sent mode.\n");
+					//printf("Stimulus: sent mode.\n");
 #endif
 					qKeyOut.send(&key[0], sizeof(unsigned char) * 16);
 #if DEBUG_STIM
@@ -265,7 +266,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		unsigned char buffer[16];
 		unsigned long fileLength = 0;
 		unsigned long h;
-		unsigned char mode;
+		//unsigned char mode;
 
 		//get length of the file
 		fseek(ifp, 0L, SEEK_END);
@@ -275,7 +276,7 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 		else fileLength = (fileLength / 16) + 1;
 
 		mode = 1;
-		qModeOut.send(&mode, sizeof(unsigned char));
+		//qModeOut.send(&mode, sizeof(unsigned char));
 		
 		qKeyOut.send(&key[0], sizeof(unsigned char) * 16);
 		qLengthOut.send(&fileLength, sizeof(unsigned long));
@@ -309,14 +310,60 @@ behavior stimulus(i_sender qBlockOut, i_sender qKeyOut, i_sender qModeOut, i_sen
 	}
 
 	void main (void){
-		FILE *  fp;
+		/*FILE *  fp;
 		FILE * ifp;
 		FILE * ofp;
 		char buffer1[128];
 		unsigned char buffer2[128];
-		
-		runECBMCTEnc();
-		runECBMCTDec();
+    */
+    unsigned char i;
+
+    if (iter == 0) {
+      input_key[ 0] = 0x13;
+      input_key[ 1] = 0x9a;
+      input_key[ 2] = 0x35;
+      input_key[ 3] = 0x42;
+      input_key[ 4] = 0x2f;
+      input_key[ 5] = 0x1d;
+      input_key[ 6] = 0x61;
+      input_key[ 7] = 0xde;
+      input_key[ 8] = 0x3c;
+      input_key[ 9] = 0x91;
+      input_key[10] = 0x78;
+      input_key[11] = 0x7f;
+      input_key[12] = 0xe0;
+      input_key[13] = 0x50;
+      input_key[14] = 0x7a;
+      input_key[15] = 0xfd;
+
+      input_block[ 0] = 0xb9;
+      input_block[ 1] = 0x14;
+      input_block[ 2] = 0x5a;
+      input_block[ 3] = 0x76;
+      input_block[ 4] = 0x8b;
+      input_block[ 5] = 0x7d;
+      input_block[ 6] = 0xc4;
+      input_block[ 7] = 0x89;
+      input_block[ 8] = 0xa0;
+      input_block[ 9] = 0x96;
+      input_block[10] = 0xb5;
+      input_block[11] = 0x46;
+      input_block[12] = 0xf4;
+      input_block[13] = 0x3b;
+      input_block[14] = 0x23;
+      input_block[15] = 0x1f;
+
+      mode = 1; // ECB encrypt
+    } else {
+      for (i=0; i<16; i++) {
+        input_block[i] = output_block[i];
+      }
+    }
+
+		iter++;
+
+		//runECBMCTEnc();
+		//runECBMCTDec();
 		/*
 		//get files to encrypt
 		fp = fopen(ENCRYPT_LIST, "r");
