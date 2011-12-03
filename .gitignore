@@ -1,0 +1,7 @@
+*.h
+*.cc
+*.o
+*.si*
+*.txt
+test
+.directory
