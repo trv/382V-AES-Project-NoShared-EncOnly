@@ -8,7 +8,6 @@ import "c_queue";
 #endif
 
 behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
-//i_receiver blockIn, i_sender blockOut){
 
 	const unsigned char invByteSubTable[256] = {
 		0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
@@ -30,12 +29,9 @@ behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
 
 	void main (void) {
 		int i;
-		//unsigned char block[16];
 #if DEBUG_INVBYTESUB
 		int count = 0;
 #endif
-		//for (;;) {
-			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVBYTESUB
 			printf("InvBytesub received block %u\n", ++count);
 			printf("InvBytesub block data received:\n");
@@ -50,7 +46,6 @@ behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
 				dec_block[i] = invByteSubTable[dec_block[i]];
 			}
 
-			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVBYTESUB
 			printf("InvBytesub sent block %u\n", count);
 			printf("InvBytesub block data sent:\n");
@@ -59,6 +54,5 @@ behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
 			}
 			printf("\n");
 #endif
-		//}
 	}
 };

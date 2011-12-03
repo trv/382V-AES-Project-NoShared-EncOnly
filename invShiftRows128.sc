@@ -8,7 +8,6 @@ import "c_queue";
 #endif
 
 behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
-//i_receiver blockIn, i_sender blockOut){
 
 	//rotateRights in place 32 bits (in 4 unsigned chars) one byte	
 	void rotateRight (unsigned char * word32){
@@ -21,13 +20,10 @@ behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
 	}
 
 	void main (void){
-		//unsigned char block[16];
 		int i, j;
 #if DEBUG_INVSHIFT
 		int count = 0;
 #endif
-		//for (;;) {
-			//blockIn.receive(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow received block %u\n", ++count);
 			printf("InvShiftRow block data received:\n");
@@ -42,7 +38,6 @@ behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
 					rotateRight(&dec_block[i]);
 				}
 			}
-			//blockOut.send(&block[0], sizeof(unsigned char) * 16);
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow sent block %u\n", count);
 			printf("InvShiftRow block data sent:\n");
@@ -51,6 +46,5 @@ behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
 			}
 			printf("\n");
 #endif
-		//}
 	}
 };

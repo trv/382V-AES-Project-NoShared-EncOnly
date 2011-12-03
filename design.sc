@@ -39,6 +39,4 @@ behavior Design(i_receiver qDataIn, i_receiver qKeyIn, i_receiver qModeIn, i_rec
 			aes_dec_inst;
 		}
 	}
-
-
 };
