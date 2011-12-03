@@ -1,0 +1,6 @@
+*.h
+*.cc
+*.o
+*.si*
+*.txt
+test
