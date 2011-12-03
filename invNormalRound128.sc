@@ -7,17 +7,13 @@ import "invMixColumns128";
 import "invShiftRows128";
 
 behavior invNormalRound128 ( unsigned char round, unsigned char isEncode) {
-//i_receiver stateIn, i_receiver keyIn, i_sender stateOut){
-//	const unsigned long queueSize = 1024;
-//	c_queue queueShiftByte(queueSize), queueAddMix(queueSize), queueByteAdd(queueSize);
+	invByteSub128 invbyte_inst(round, isEncode);
 
-	invByteSub128 invbyte_inst(round, isEncode); //queueShiftByte, queueByteAdd);
+	invShiftRow128 invshift_inst(round, isEncode);
 
-	invShiftRow128 invshift_inst(round, isEncode); //stateIn, queueShiftByte);
+	invMixColumns128 invmix_inst(round, isEncode);
 
-	invMixColumns128 invmix_inst(round, isEncode); //queueAddMix, stateOut);
-
-	addRoundKey128 add_inst(round, isEncode); //queueByteAdd, keyIn, queueAddMix);
+	addRoundKey128 add_inst(round, isEncode);
 
 	void main (void){
 		fsm {

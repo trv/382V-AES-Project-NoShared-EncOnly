@@ -15,7 +15,7 @@ behavior normalRound128 ( in unsigned char round, in unsigned char isEncode ) {
 	addRoundKey128 add_inst(round, isEncode);
 
 	void main (void){
-		fsm {  // run these sequentially now
+		fsm{ 
 			byte_inst : {goto shift_inst;}
 			shift_inst : {goto mix_inst;}
 			mix_inst : {goto add_inst;}
