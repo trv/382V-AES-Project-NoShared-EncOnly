@@ -1,6 +1,6 @@
 //#include <stdio.h>
 
-import "c_queue";
+//import "c_queue";
 
 import "keySched128";
 import "byteSub128";
@@ -10,9 +10,9 @@ import "mixColumns128";
 import "firstRound128";
 import "normalRound128";
 import "finalRound128";
-import "readKey128";
-import "readBlock128";
-import "writeBlock128";
+//import "readKey128";
+//import "readBlock128";
+//import "writeBlock128";
 
 unsigned char enc_block[16];
 unsigned char enc_key[176];

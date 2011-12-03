@@ -408,6 +408,7 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode) {
       printf("Monte Carlo Decrypt Test: ");
       printBlock(output_block, 16);
       printf("\n");
+      exit(0);
     }
 
 		iter++;

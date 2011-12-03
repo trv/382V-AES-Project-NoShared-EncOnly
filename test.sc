@@ -2,10 +2,10 @@
 
 #include <stdio.h>
 
-import "c_queue";
+//import "c_queue";
 import "stimulus";
-import "monitor_enc";
-import "monitor_dec";
+//import "monitor_enc";
+//import "monitor_dec";
 import "design";
 
 

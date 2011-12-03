@@ -1,4 +1,4 @@
-import "c_queue";
+//import "c_queue";
 
 import "keySched128";
 import "invByteSub128";
@@ -8,9 +8,9 @@ import "invMixColumns128";
 import "invFirstRound128";
 import "invNormalRound128";
 import "invFinalRound128";
-import "readKey128";
-import "readBlock128";
-import "writeBlock128";
+//import "readKey128";
+//import "readBlock128";
+//import "writeBlock128";
 
 unsigned char dec_block[16];
 unsigned char dec_key[176];
