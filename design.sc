@@ -1,4 +1,5 @@
 #define DEBUG_DESIGN 0
+//#include <stdio.h>
 
 import "controller";
 import "AES128Enc";
@@ -19,6 +20,7 @@ behavior Design(in unsigned char mode) {
 	AES128Dec aes_dec_inst;
 
 	void main(void) {
+    //printf("starting design...\n");
 		fsm {
 			control_in_inst: {if (mode == MODE_ECB_ENC) goto aes_enc_inst;
                         if (mode == MODE_ECB_DEC) goto aes_dec_inst;}

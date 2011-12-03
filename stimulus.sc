@@ -14,7 +14,7 @@ import "i_sender";
 
 #include "topShared.h"
 
-behavior stimulus(inout unsigned char iter, out unsigned char mode) {
+behavior stimulus(inout unsigned short iter, out unsigned char mode) {
 
 	bool checkBlock(unsigned char * golden, unsigned char * check, int length){
 		int i;
@@ -361,6 +361,55 @@ behavior stimulus(inout unsigned char iter, out unsigned char mode) {
       }
     }
 
+    if (iter == 1000) {
+      printf("Monte Carlo Encrypt test: ");
+      printBlock(output_block, 16);
+      printf("\n");
+
+      // done with encrypt test, so start on decrypt mc
+      input_key[ 0] = 0x0c;
+      input_key[ 1] = 0x60;
+      input_key[ 2] = 0xe7;
+      input_key[ 3] = 0xbf;
+      input_key[ 4] = 0x20;
+      input_key[ 5] = 0xad;
+      input_key[ 6] = 0xa9;
+      input_key[ 7] = 0xba;
+      input_key[ 8] = 0xa9;
+      input_key[ 9] = 0xe1;
+      input_key[10] = 0xdd;
+      input_key[11] = 0xf0;
+      input_key[12] = 0xd1;
+      input_key[13] = 0x54;
+      input_key[14] = 0x07;
+      input_key[15] = 0x26;
+
+      input_block[ 0] = 0xb0;
+      input_block[ 1] = 0x8a;
+      input_block[ 2] = 0x29;
+      input_block[ 3] = 0xb1;
+      input_block[ 4] = 0x1a;
+      input_block[ 5] = 0x50;
+      input_block[ 6] = 0x0e;
+      input_block[ 7] = 0xa3;
+      input_block[ 8] = 0xac;
+      input_block[ 9] = 0xa4;
+      input_block[10] = 0x2c;
+      input_block[11] = 0x36;
+      input_block[12] = 0x67;
+      input_block[13] = 0x5b;
+      input_block[14] = 0x97;
+      input_block[15] = 0x85;
+
+      mode = 2; // ECB decrypt MC test
+    }
+
+    if (iter == 2000) {
+      printf("Monte Carlo Decrypt Test: ");
+      printBlock(output_block, 16);
+      printf("\n");
+    }
+
 		iter++;
 
 		//runECBMCTEnc();
@@ -394,6 +443,6 @@ behavior stimulus(inout unsigned char iter, out unsigned char mode) {
 		fclose(ifp);
 		fclose(ofp);
 		*/
-		exit(0);
+		//exit(0);
 	}
 };

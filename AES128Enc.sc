@@ -1,3 +1,5 @@
+//#include <stdio.h>
+
 import "c_queue";
 
 import "keySched128";
@@ -46,6 +48,7 @@ behavior AES128Enc {
 	finalRound128  final_inst10(round10, isEncode);
 
 	void main (void){
+    //printf("starting AES128Enc.sc...\n");
 		fsm{
 			key_inst : {goto first_inst1;}
 			first_inst1 : {goto normal_inst2;}
