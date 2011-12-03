@@ -27,7 +27,7 @@ behavior controllerIn(in unsigned char modeIn){
 			} 
 			break;
 		case MODE_ECB_DEC:
-			for (i = 0; i < length; i++){
+			for (i = 0; i < 16; i++){
 				dec_block[i] = input_block[i];
 			    dec_key[i] = input_key[i];
 			}
@@ -58,7 +58,7 @@ behavior controllerOut(in unsigned char modeIn){
 			} 
 			break;
 		case MODE_ECB_DEC:
-			for (i = 0; i < length; i++) {
+			for (i = 0; i < 16; i++) {
 			    output_block[i] = dec_block[i];
 			}
 			break;
