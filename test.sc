@@ -9,15 +9,17 @@ import "stimulus";
 import "design";
 
 
-unsigned char input_block[16];
-unsigned char IV_block[16];
-unsigned char input_key[16];
-unsigned char output_block[16];
+
 
 behavior Main (){
 
-  unsigned char mode;
-  unsigned short iter = 0;
+    unsigned char input_block[16];
+    //unsigned char IV_block[16];
+    unsigned char input_key[176];
+    unsigned char output_block[16];
+   
+    unsigned char mode;
+    unsigned short iter = 0;
 
 	//const unsigned long qSize = 1024;
 	
@@ -26,11 +28,11 @@ behavior Main (){
 	//c_queue qBlockMonStim(qSize);
 
 	//stimulus and monitor instances
-	stimulus stim_inst(iter, mode);
+	stimulus stim_inst(iter, mode, input_block, input_key, output_block);
 //qDataStimDes, qKeyStimDes, qModeStimDes, qLengthStimDes, qIVStimDes, qBlockMonStim);
 	//monitor_enc monitor_inst(qBlockDesMon, qBlockMonStim);
 	
-	Design design_inst(mode);
+	Design design_inst(mode, input_block, input_key, output_block);
 
   void printOutput() {
     int i;
