@@ -1,7 +1,6 @@
-#define	DEBUG_INVBYTESUB 0
+#define	DEBUG_INVBYTESUB 1
 
 #include "shared.h"
-import "c_queue";
 
 #if DEBUG_INVBYTESUB
 #include <stdio.h>
@@ -36,11 +35,10 @@ behavior invByteSub128(in unsigned char block_in[16], out unsigned char block_ou
 			printf("InvBytesub received block %u\n", ++count);
 			printf("InvBytesub block data received:\n");
 			for (i = 0; i < 16; i++){
-			//	printf("%02hhx ", block[i]);
+				printf("%02hhx ", block_in[i]);
 			}
 			printf("\n");
 #endif
-
       for (i = 0; i < 16; i++){
         block_out[i] = invByteSubTable[block_in[i]];
       }
@@ -49,7 +47,7 @@ behavior invByteSub128(in unsigned char block_in[16], out unsigned char block_ou
 			printf("InvBytesub sent block %u\n", count);
 			printf("InvBytesub block data sent:\n");
 			for (i = 0; i < 16; i++){
-			//	printf("%02hhx ", block[i]);
+				printf("%02hhx ", block_out[i]);
 			}
 			printf("\n");
 #endif

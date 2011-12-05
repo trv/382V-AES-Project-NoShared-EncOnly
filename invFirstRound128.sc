@@ -1,7 +1,4 @@
-
 #include "shared.h"
-
-import "c_queue";
 
 import "addRoundKey128";
 

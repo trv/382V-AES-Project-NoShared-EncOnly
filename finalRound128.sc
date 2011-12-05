@@ -1,5 +1,3 @@
-import "c_queue";
-
 import "byteSub128";
 import "shiftRow128";
 import "addRoundKey128";

@@ -1,5 +1,3 @@
-import "c_queue";
-
 import "addRoundKey128";
 import "byteSub128";
 import "mixColumns128";

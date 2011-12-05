@@ -1,11 +1,10 @@
-#define DEBUG_INV_MIX 0
+#define DEBUG_INV_MIX 1
 
 #if DEBUG_INV_MIX
 #include <stdio.h>
 #endif
 
 #include "shared.h"
-import "c_queue";
 
 behavior invMixColumns128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
 
@@ -102,7 +101,7 @@ behavior invMixColumns128(in unsigned char block_in[16], inout unsigned char blo
 		printf("InvMixColumns received block %u\n", ++count);
 		printf("InvMixColumns block data received:\n");
 		for (i = 0; i < 16; i++){
-		//	printf("%02hhx ", block[i]);
+			printf("%02hhx ", block_in[i]);
 		}
 		printf("\n");
 #endif
@@ -121,7 +120,7 @@ behavior invMixColumns128(in unsigned char block_in[16], inout unsigned char blo
 		printf("InvMixColumns sent block %u\n", count);
 		printf("InvMixColumns block data sent:\n");
 		for (i = 0; i < 16; i++){
-		//	printf("%02hhx ", block[i]);
+			printf("%02hhx ", block_out[i]);
 		}
 		printf("\n");
 #endif

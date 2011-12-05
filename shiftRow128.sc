@@ -1,7 +1,6 @@
-#define DEBUG_SHIFT 0
+#define DEBUG_SHIFT 1
 
 #include "shared.h"
-import "c_queue";
 
 #if DEBUG_SHIFT
 #include <stdio.h>
@@ -28,7 +27,7 @@ behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[
 			printf("ShiftRow received block %u\n", ++count);
 			printf("ShiftRow block data received:\n");
 			for (i = 0; i < 16; i++){
-				//printf("%02hhx ", block[i]);
+				printf("%02hhx ", block_in[i]);
 			}
 			printf("\n");
 #endif
@@ -64,10 +63,9 @@ behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[
 			printf("ShiftRow sent block %u\n", count);
 			printf("ShiftRow block data sent:\n");
 			for (i = 0; i < 16; i++){
-			//	printf("%02hhx ", block[i]);
+				printf("%02hhx ", block_out[i]);
 			}
 			printf("\n");
 #endif
-		//}
 	}
 };

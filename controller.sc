@@ -1,4 +1,4 @@
-#define DEBUG_CONTROLLER 0
+#define DEBUG_CONTROLLER 1
 
 #include "topShared.h"
 
@@ -49,7 +49,6 @@ behavior controllerOut(in unsigned char modeIn, in unsigned char output_block_en
 #if DEBUG_CONTROLLER
 		printf("ControllerOut: read in mode value: %hhu.\n", mode);
 #endif
-		
 	    switch (mode) {
 		case MODE_ECB_ENC: 
 			for (i = 0; i < 16; i++) {

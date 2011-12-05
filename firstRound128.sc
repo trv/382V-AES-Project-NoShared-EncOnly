@@ -1,5 +1,3 @@
-import "c_queue";
-
 import "addRoundKey128";
 
 behavior firstRound128(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {

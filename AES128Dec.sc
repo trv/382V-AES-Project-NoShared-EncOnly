@@ -1,4 +1,7 @@
-//import "c_queue";
+#define DEBUG_AES128DEC 1
+#if DEBUG_AES128DEC
+#include <stdio.h>
+#endif
 
 import "keySched128";
 import "invByteSub128";
@@ -8,9 +11,6 @@ import "invMixColumns128";
 import "invFirstRound128";
 import "invNormalRound128";
 import "invFinalRound128";
-//import "readKey128";
-//import "readBlock128";
-//import "writeBlock128";
 
 behavior AES128Dec(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
 
@@ -53,6 +53,8 @@ behavior AES128Dec(in unsigned char key[16], in unsigned char block_in[16], out 
 	invFirstRound128  invfirst_inst10(key, block1, block_out);
 
 	void main (void){
+#if DEBUG_AES128DEC
+			printf("Starting AES128DEC\n");
 		fsm{
 			key_inst : {goto invfinal_inst1;}
 			invfinal_inst1 : {goto invnormal_inst2;}

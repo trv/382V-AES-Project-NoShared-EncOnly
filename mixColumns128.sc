@@ -1,11 +1,10 @@
-#define DEBUG_MIX 0
+#define DEBUG_MIX 1
 
 #if DEBUG_MIX
 #include <stdio.h>
 #endif
 
 #include "shared.h"
-import "c_queue";
 
 behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
     
@@ -39,7 +38,7 @@ behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_
 		printf("MixColumns received block %u\n", ++count);
 		printf("MixColumns block data received:\n");
 		for (i = 0; i < 16; i++){
-		//	printf("%02hhx ", block[i]);
+			printf("%02hhx ", block_in[i]);
 		}
 		printf("\n");
 #endif
@@ -58,7 +57,7 @@ behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_
 		printf("MixColumns sent block %u\n", count);
 		printf("MixColumns block data sent:\n");
 		for (i = 0; i < 16; i++){
-		//	printf("%02hhx ", block[i]);
+			printf("%02hhx ", block_out[i]);
 		}
 		printf("\n");
 #endif

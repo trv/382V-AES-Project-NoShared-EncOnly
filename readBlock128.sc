@@ -1,6 +1,5 @@
-
 #include "shared.h"
-import "c_queue";
+import "i_receiver";
 
 behavior readBlock128(i_receiver blockIn, in unsigned char isEncode) {
 

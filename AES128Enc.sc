@@ -1,6 +1,7 @@
-//#include <stdio.h>
-
-//import "c_queue";
+#define DEBUG_AES128ENC 1
+#if DEBUG_AES128ENC
+#include <stdio.h>
+#endif
 
 import "keySched128";
 import "byteSub128";
@@ -10,9 +11,6 @@ import "mixColumns128";
 import "firstRound128";
 import "normalRound128";
 import "finalRound128";
-//import "readKey128";
-//import "readBlock128";
-//import "writeBlock128";
 
 behavior AES128Enc(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
 
@@ -55,7 +53,9 @@ behavior AES128Enc(in unsigned char key[16], in unsigned char block_in[16], out 
 	finalRound128  final_inst10(key10, block10, block_out);
 
 	void main (void){
-    //printf("starting AES128Enc.sc...\n");
+#if DEBUG_AES128ENC
+    printf("starting AES128Enc\n");
+#endif
 		fsm{
 			key_inst : {goto first_inst1;}
 			first_inst1 : {goto normal_inst2;}
