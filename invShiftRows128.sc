@@ -1,4 +1,4 @@
-#define DEBUG_INVSHIFT 1
+#define DEBUG_INVSHIFT 0
 
 #include "shared.h"
 import "c_queue";
@@ -14,13 +14,11 @@ behavior invShiftRow128(in unsigned char block_in[16], out unsigned char block_o
 #endif
 
 	//rotateRights in place 32 bits (in 4 unsigned chars) one byte	
-	void rotateRight (unsigned char * word32){
-		unsigned char tempChar;
-		tempChar = word32[12];
-		word32[12] = word32[8];
-		word32[8] = word32[4];
-		word32[4] = word32[0];
-		word32[0] = tempChar;
+	void rotateRight (unsigned char * word32, unsigned char * word32Out){
+		word32Out[12] = word32[8];
+		word32Out[8] = word32[4];
+		word32Out[4] = word32[0];
+		word32Out[0] = word32[12];
 	}
 
 	void main (void){
@@ -36,36 +34,25 @@ behavior invShiftRow128(in unsigned char block_in[16], out unsigned char block_o
 			}
 			printf("\n");
 #endif
-/*
-			//rotateRight row j of block by j bytes 
-			for (i = 1; i < 4; i++){
-				for (j = i; j > 0; j--){
-					rotateRight(&dec_block[i]);
-				}
-			}
-*/
-
       block_out[0] = block_in[0];
-      block_out[1] = block_in[1];
-      block_out[2] = block_in[2];
-      block_out[3] = block_in[3];
+      block_out[1] = block_in[13];
+      block_out[2] = block_in[10];
+      block_out[3] = block_in[7];
 
-      block_out[4] = block_in[7];
-      block_out[5] = block_in[4];
-      block_out[6] = block_in[5];
-      block_out[7] = block_in[6];
+      block_out[4] = block_in[4];
+      block_out[5] = block_in[1];
+      block_out[6] = block_in[14];
+      block_out[7] = block_in[11];
 
-      block_out[8] = block_in[10];
-      block_out[9] = block_in[11];
-      block_out[10] = block_in[8];
-      block_out[11] = block_in[9];
+      block_out[8] = block_in[8];
+      block_out[9] = block_in[5];
+      block_out[10] = block_in[2];
+      block_out[11] = block_in[15];
 
-      block_out[12] = block_in[13];
-      block_out[13] = block_in[14];
-      block_out[14] = block_in[15];
-      block_out[15] = block_in[12];
-
-
+      block_out[12] = block_in[12];
+      block_out[13] = block_in[9];
+      block_out[14] = block_in[6];
+      block_out[15] = block_in[3];
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow sent block %u\n", count);
 			printf("InvShiftRow block data sent:\n");

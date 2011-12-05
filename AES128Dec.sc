@@ -1,4 +1,4 @@
-#define DEBUG_AES128DEC 1
+#define DEBUG_AES128DEC 0
 #if DEBUG_AES128DEC
 #include <stdio.h>
 #endif
