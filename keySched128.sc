@@ -116,17 +116,17 @@ behavior keySched128(in unsigned char key[16],
     }
 
     // write keys into outputs
-    for (index=0; index < 16; index++) {
-      key1[index] = full_key[index + (16*1)];
-      key2[index] = full_key[index + (16*2)];
-      key3[index] = full_key[index + (16*3)];
-      key4[index] = full_key[index + (16*4)];
-      key5[index] = full_key[index + (16*5)];
-      key6[index] = full_key[index + (16*6)];
-      key7[index] = full_key[index + (16*7)];
-      key8[index] = full_key[index + (16*8)];
-      key9[index] = full_key[index + (16*9)];
-      key10[index] = full_key[index + (16*10)];
+    for (c=0; c < 16; c++) {
+      key1[c] = full_key[c + (16*1)];
+      key2[c] = full_key[c + (16*2)];
+      key3[c] = full_key[c + (16*3)];
+      key4[c] = full_key[c + (16*4)];
+      key5[c] = full_key[c + (16*5)];
+      key6[c] = full_key[c + (16*6)];
+      key7[c] = full_key[c + (16*7)];
+      key8[c] = full_key[c + (16*8)];
+      key9[c] = full_key[c + (16*9)];
+      key10[c] = full_key[c + (16*10)];
     }
 
 #if DEBUG_KEYSCHED_4
