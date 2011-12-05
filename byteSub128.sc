@@ -1,4 +1,4 @@
-#define	DEBUG_BYTESUB 1
+#define	DEBUG_BYTESUB 0
 
 #include "shared.h"
 import "c_queue";

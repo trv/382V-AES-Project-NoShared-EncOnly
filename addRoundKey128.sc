@@ -26,7 +26,6 @@ behavior addRoundKey128(in unsigned char key[16], in unsigned char block_in[16],
       //bitwise XOR with key
       block_out[i] = block_in[i] ^ key[i];
     }
-
 #if DEBUG_ADD
     printf("AddRoundKey send block %u\n", countBlock);
     printf("AddRoundKey key data:\n");
