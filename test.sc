@@ -10,8 +10,7 @@ import "design";
 
 
 
-
-behavior Main (){
+behavior AES (){
 
     unsigned char input_block[16];
     //unsigned char IV_block[16];
@@ -41,7 +40,7 @@ behavior Main (){
     }
   }
 
-	int main (void) {
+	void main (void) {
     //printOutput();
 		fsm{
 			//stimulus
@@ -51,8 +50,19 @@ behavior Main (){
 			// runs both AES128Enc and AES128Dec in parallel
 			design_inst: {if (iter != 2001) goto stim_inst;
                     break;}
-    }
-		return 0;
+        }
 	}
+
+};
+
+
+behavior Main (){
+    AES aes;
+
+    int main(void) {
+        aes.main();
+        return 0;
+    }
+
 
 };
