@@ -1,4 +1,4 @@
-#define DEBUG_ROUND 1
+#define DEBUG_ROUND 0
 
 import "byteSub128";
 import "shiftRow128";

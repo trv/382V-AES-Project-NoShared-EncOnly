@@ -333,6 +333,24 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, out unsigne
       input_key[13] = 0x50;
       input_key[14] = 0x7a;
       input_key[15] = 0xfd;
+	  /*
+      input_key[ 0] = 0x00;
+      input_key[ 1] = 0x00;
+      input_key[ 2] = 0x00;
+      input_key[ 3] = 0x00;
+      input_key[ 4] = 0x00;
+      input_key[ 5] = 0x00;
+      input_key[ 6] = 0x00;
+      input_key[ 7] = 0x00;
+      input_key[ 8] = 0x00;
+      input_key[ 9] = 0x00;
+      input_key[10] = 0x00;
+      input_key[11] = 0x00;
+      input_key[12] = 0x00;
+      input_key[13] = 0x00;
+      input_key[14] = 0x00;
+      input_key[15] = 0x00;
+	  */
 
       input_block[ 0] = 0xb9;
       input_block[ 1] = 0x14;

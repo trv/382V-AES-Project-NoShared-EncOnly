@@ -1,8 +1,8 @@
-#define DEBUG_KEYSCHED_0 1
-#define DEBUG_KEYSCHED_1 1
-#define DEBUG_KEYSCHED_2 1
-#define DEBUG_KEYSCHED_3 1
-#define DEBUG_KEYSCHED_4 1
+#define DEBUG_KEYSCHED_0 0
+#define DEBUG_KEYSCHED_1 0
+#define DEBUG_KEYSCHED_2 0
+#define DEBUG_KEYSCHED_3 0
+#define DEBUG_KEYSCHED_4 0
 
 #if DEBUG_KEYSCHED_0
 #include <stdio.h>
@@ -96,8 +96,8 @@ behavior keySched128(in unsigned char key[16],
 #endif
 
     // copy key into full_key
-    for (i=0; i < 16; i++) {
-      full_key[i] = key[i];
+    for (c = 0; c < 16; c++) {
+      full_key[c] = key[c];
     }
 
     // expand key
@@ -109,7 +109,7 @@ behavior keySched128(in unsigned char key[16],
         core(temp, i);
         i++;
       }
-      for (j = 0; j < 4; j++){
+      for (j = 0; j < 4 && c < 176; j++){
         full_key[c] = full_key[c-16] ^ temp[j];
         c++;
       }
@@ -132,10 +132,9 @@ behavior keySched128(in unsigned char key[16],
 #if DEBUG_KEYSCHED_4
 	sendCount += 11;
 	printf("KeySched sent key number up through %u\n", sendCount);
-	for (index = 0; index < 11; index++){
-			//printf("Key #%u\n", index+1);
-			for (index2 = 0; index2< 16; index2++){
-					printf("%02hhx ", full_key[16*index + index2]);
+	for (index = 0; index < 176; ){
+			for (index2 = 0; index2 < 16; index2++){
+					printf("%02hhx ", full_key[index++]);
 			}
 			printf("\n");
 	}

@@ -1,4 +1,4 @@
-#define DEBUG_CONTROLLER 1
+#define DEBUG_CONTROLLER 0
 
 #include "topShared.h"
 
