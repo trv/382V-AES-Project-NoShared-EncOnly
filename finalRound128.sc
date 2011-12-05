@@ -4,10 +4,14 @@ import "byteSub128";
 import "shiftRow128";
 import "addRoundKey128";
 
-behavior finalRound128( in unsigned char round, in unsigned char isEncode ) {
-	byteSub128 byte_inst(round, isEncode);
-	shiftRow128 shift_inst(round, isEncode);
-	addRoundKey128 add_inst(round, isEncode);
+behavior finalRound128(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
+
+  unsigned char block1[16];
+  unsigned char block2[16];
+
+	byteSub128 byte_inst(block_in, block1);
+	shiftRow128 shift_inst(block1, block2);
+	addRoundKey128 add_inst(key, block2, block_out);
 
 	void main (void){
 		fsm {

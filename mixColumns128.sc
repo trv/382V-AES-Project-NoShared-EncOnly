@@ -7,7 +7,7 @@
 #include "shared.h"
 import "c_queue";
 
-behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
+behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
     
     void mixColumn(unsigned char *r) {
         unsigned char a[4];
@@ -44,15 +44,16 @@ behavior mixColumns128( in unsigned char round, in unsigned char isEncode) {
 		printf("\n");
 #endif
 
-    if (isEncode) {
-  		for (i = 0; i < 4; i++) {
-	  	    mixColumn(enc_block + (i*4));
-		  }
-    } else {
-  		for (i = 0; i < 4; i++) {
-	  	    mixColumn(dec_block + (i*4));
-      }
+    // copy input to output
+    for (i = 0; i < 16; i++) {
+      block_out[i] = block_in[i];
     }
+
+    // mixcolumns on output block
+    for (i = 0; i < 4; i++) {
+        mixColumn(block_out + (i*4));
+    }
+
 #if DEBUG_MIX
 		printf("MixColumns sent block %u\n", count);
 		printf("MixColumns block data sent:\n");

@@ -7,7 +7,7 @@ import "c_queue";
 #include <stdio.h>
 #endif
 
-behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
+behavior invShiftRow128(in unsigned char block_in[16], out unsigned char block_out[16]) {
 
 	//rotateRights in place 32 bits (in 4 unsigned chars) one byte	
 	void rotateRight (unsigned char * word32){
@@ -32,12 +32,36 @@ behavior invShiftRow128( unsigned char round, unsigned char isEncode) {
 			}
 			printf("\n");
 #endif
+/*
 			//rotateRight row j of block by j bytes 
 			for (i = 1; i < 4; i++){
 				for (j = i; j > 0; j--){
 					rotateRight(&dec_block[i]);
 				}
 			}
+*/
+
+      block_out[0] = block_in[0];
+      block_out[1] = block_in[1];
+      block_out[2] = block_in[2];
+      block_out[3] = block_in[3];
+
+      block_out[4] = block_in[7];
+      block_out[5] = block_in[4];
+      block_out[6] = block_in[5];
+      block_out[7] = block_in[6];
+
+      block_out[8] = block_in[10];
+      block_out[9] = block_in[11];
+      block_out[10] = block_in[8];
+      block_out[11] = block_in[9];
+
+      block_out[12] = block_in[13];
+      block_out[13] = block_in[14];
+      block_out[14] = block_in[15];
+      block_out[15] = block_in[12];
+
+
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow sent block %u\n", count);
 			printf("InvShiftRow block data sent:\n");

@@ -7,7 +7,7 @@ import "c_queue";
 #include <stdio.h>
 #endif
 
-behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
+behavior invByteSub128(in unsigned char block_in[16], out unsigned char block_out[16]) {
 
 	const unsigned char invByteSubTable[256] = {
 		0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
@@ -41,10 +41,9 @@ behavior invByteSub128( unsigned char round, unsigned char isEncode ) {
 			printf("\n");
 #endif
 
-
-			for (i = 0; i < 16; i++){
-				dec_block[i] = invByteSubTable[dec_block[i]];
-			}
+      for (i = 0; i < 16; i++){
+        block_out[i] = invByteSubTable[block_in[i]];
+      }
 
 #if DEBUG_INVBYTESUB
 			printf("InvBytesub sent block %u\n", count);

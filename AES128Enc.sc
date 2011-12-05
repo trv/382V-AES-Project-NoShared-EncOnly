@@ -14,38 +14,45 @@ import "finalRound128";
 //import "readBlock128";
 //import "writeBlock128";
 
-unsigned char enc_block[16];
-unsigned char enc_key[176];
+behavior AES128Enc(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
 
-behavior AES128Enc {
-  unsigned char isEncode = (unsigned char) 1;
-  unsigned char round0 = (unsigned char) 0;
-  unsigned char round1 = (unsigned char) 1;
-  unsigned char round2 = (unsigned char) 2;
-  unsigned char round3 = (unsigned char) 3;
-  unsigned char round4 = (unsigned char) 4;
-  unsigned char round5 = (unsigned char) 5;
-  unsigned char round6 = (unsigned char) 6;
-  unsigned char round7 = (unsigned char) 7;
-  unsigned char round8 = (unsigned char) 8;
-  unsigned char round9 = (unsigned char) 9;
-  unsigned char round10 = (unsigned char) 10;
+  unsigned char block1[16];
+  unsigned char block2[16];
+  unsigned char block3[16];
+  unsigned char block4[16];
+  unsigned char block5[16];
+  unsigned char block6[16];
+  unsigned char block7[16];
+  unsigned char block8[16];
+  unsigned char block9[16];
+  unsigned char block10[16];
+
+  unsigned char key1[16];
+  unsigned char key2[16];
+  unsigned char key3[16];
+  unsigned char key4[16];
+  unsigned char key5[16];
+  unsigned char key6[16];
+  unsigned char key7[16];
+  unsigned char key8[16];
+  unsigned char key9[16];
+  unsigned char key10[16];
 
 	//key scheduler instance
-	keySched128 key_inst( isEncode );  // for encode
-	
+	keySched128 key_inst(key, key1, key2, key3, key4, key5, key6, key7, key8, key9, key10);
+
 	//instances of rounds
-	firstRound128  first_inst1(round0, isEncode);
-	normalRound128 normal_inst2(round1, isEncode);
-	normalRound128 normal_inst3(round2, isEncode);
-	normalRound128 normal_inst4(round3, isEncode);
-	normalRound128 normal_inst5(round4, isEncode);
-	normalRound128 normal_inst6(round5, isEncode);
-	normalRound128 normal_inst7(round6, isEncode);
-	normalRound128 normal_inst8(round7, isEncode);
-	normalRound128 normal_inst9(round8, isEncode);
-	normalRound128 normal_inst10(round9, isEncode);
-	finalRound128  final_inst10(round10, isEncode);
+	firstRound128  first_inst1(key, block_in, block1);
+	normalRound128 normal_inst2(key1, block1, block2);
+	normalRound128 normal_inst3(key2, block2, block3);
+	normalRound128 normal_inst4(key3, block3, block4);
+	normalRound128 normal_inst5(key4, block4, block5);
+	normalRound128 normal_inst6(key5, block5, block6);
+	normalRound128 normal_inst7(key6, block6, block7);
+	normalRound128 normal_inst8(key7, block7, block8);
+	normalRound128 normal_inst9(key8, block8, block9);
+	normalRound128 normal_inst10(key9, block9, block10);
+	finalRound128  final_inst10(key10, block10, block_out);
 
 	void main (void){
     //printf("starting AES128Enc.sc...\n");

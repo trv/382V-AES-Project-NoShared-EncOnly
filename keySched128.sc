@@ -11,7 +11,17 @@
 #include "shared.h"
 import "c_queue";
 
-behavior keySched128( in unsigned char isEncode ) {
+behavior keySched128(in unsigned char key[16], 
+                    out unsigned char key1[16],
+                    out unsigned char key2[16],
+                    out unsigned char key3[16],
+                    out unsigned char key4[16],
+                    out unsigned char key5[16],
+                    out unsigned char key6[16],
+                    out unsigned char key7[16],
+                    out unsigned char key8[16],
+                    out unsigned char key9[16],
+                    out unsigned char key10[16]) {
 	const unsigned char RconBox[15] = {
 		0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a};
 
@@ -65,6 +75,7 @@ behavior keySched128( in unsigned char isEncode ) {
 
 	void main (void){
 		unsigned char temp[4];
+    unsigned char full_key[176];
 		unsigned char i = 0;	//rcon index
 		int c;		//key index
 		int j;		//generic loop index
@@ -83,35 +94,41 @@ behavior keySched128( in unsigned char isEncode ) {
 			}
 			printf("\n");
 #endif
-    if (isEncode) {
-			for (c = 16; c < 176;) {
-				for (j = 0; j < 4; j++){
-					temp[j] = enc_key[j+c-4];
-				}
-				if (c % 16 == 0) {
-					core(temp, i);
-					i++;
-				}
-				for (j = 0; j < 4; j++){
-					enc_key[c] = enc_key[c-16] ^ temp[j];
-					c++;
-				}
-			}
-    } else {
-			for (c = 16; c < 176;) {
-				for (j = 0; j < 4; j++){
-					temp[j] = dec_key[j+c-4];
-				}
-				if (c % 16 == 0) {
-					core(temp, i);
-					i++;
-				}
-				for (j = 0; j < 4; j++){
-					dec_key[c] = dec_key[c-16] ^ temp[j];
-					c++;
-				}
-			}
-    }	
+
+    // copy key into full_key
+    for (i=0; i < 16; i++) {
+      full_key[i] = key[i];
+    }
+
+    // expand key
+    for (c = 16; c < 176;) {
+      for (j = 0; j < 4; j++){
+        temp[j] = full_key[j+c-4];
+      }
+      if (c % 16 == 0) {
+        core(temp, i);
+        i++;
+      }
+      for (j = 0; j < 4; j++){
+        full_key[c] = full_key[c-16] ^ temp[j];
+        c++;
+      }
+    }
+
+    // write keys into outputs
+    for (i=0; i < 16; i++) {
+      key1[i] = full_key[i + (16*1)];
+      key2[i] = full_key[i + (16*2)];
+      key3[i] = full_key[i + (16*3)];
+      key4[i] = full_key[i + (16*4)];
+      key5[i] = full_key[i + (16*5)];
+      key6[i] = full_key[i + (16*6)];
+      key7[i] = full_key[i + (16*7)];
+      key8[i] = full_key[i + (16*8)];
+      key9[i] = full_key[i + (16*9)];
+      key10[i] = full_key[i + (16*10)];
+    }
+
 #if DEBUG_KEYSCHED_4
 			sendCount += 11;
 			printf("KeySched sent key number up through %u\n", sendCount);

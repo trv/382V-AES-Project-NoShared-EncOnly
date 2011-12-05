@@ -7,7 +7,7 @@ import "c_queue";
 #include <stdio.h>
 #endif
 
-behavior shiftRow128( in unsigned char round, in unsigned char isEncode) {
+behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[16]) {
 
 	//rotateLefts in place 32 bits (in 4 unsigned chars) one byte	
 	void rotateLeft (unsigned char * word32){
@@ -32,21 +32,33 @@ behavior shiftRow128( in unsigned char round, in unsigned char isEncode) {
 			}
 			printf("\n");
 #endif
-
+/*
 			//rotateLeft row j of block by j bytes 
-      if (isEncode) {
-        for (i = 1; i < 4; i++){
-          for (j = i; j > 0; j--){
-            rotateLeft(&enc_block[i]);
-          }
-        }
-      } else {
-        for (i = 1; i < 4; i++){
-          for (j = i; j > 0; j--){
-            rotateLeft(&dec_block[i]);
-          }
+      for (i = 1; i < 4; i++){
+        for (j = i; j > 0; j--){
+          rotateLeft(&enc_block[i]);
         }
       }
+*/
+      block_out[0] = block_in[0];
+      block_out[1] = block_in[1];
+      block_out[2] = block_in[2];
+      block_out[3] = block_in[3];
+
+      block_out[4] = block_in[5];
+      block_out[5] = block_in[6];
+      block_out[6] = block_in[7];
+      block_out[7] = block_in[4];
+
+      block_out[8] = block_in[10];
+      block_out[9] = block_in[11];
+      block_out[10] = block_in[8];
+      block_out[11] = block_in[9];
+
+      block_out[12] = block_in[15];
+      block_out[13] = block_in[12];
+      block_out[14] = block_in[13];
+      block_out[15] = block_in[14];
 
 #if DEBUG_SHIFT
 			printf("ShiftRow sent block %u\n", count);

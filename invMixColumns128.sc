@@ -7,7 +7,7 @@
 #include "shared.h"
 import "c_queue";
 
-behavior invMixColumns128(unsigned char round, unsigned char isEncode) {
+behavior invMixColumns128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
 
 	const unsigned char lookupGmul14[256] = {
 		0x00,0x0e,0x1c,0x12,0x38,0x36,0x24,0x2a,0x70,0x7e,0x6c,0x62,0x48,0x46,0x54,0x5a,
@@ -106,9 +106,17 @@ behavior invMixColumns128(unsigned char round, unsigned char isEncode) {
 		}
 		printf("\n");
 #endif
+
+    // copy input to output
+    for (i = 0; i < 16; i++) {
+      block_out[i] = block_in[i];
+    }
+
+    // mixColumns on output block
 		for (i = 0; i < 4; i++) {
-		  invMixColumn(dec_block + (i*4));
+		  invMixColumn(block_out + (i*4));
 		}
+
 #if DEBUG_INV_MIX
 		printf("InvMixColumns sent block %u\n", count);
 		printf("InvMixColumns block data sent:\n");

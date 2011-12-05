@@ -6,9 +6,7 @@ import "c_queue";
 #include <stdio.h>
 #endif
 
-// `round` is the current round so we know what part of the key to use, starting with round 0
-// `isEncode` is 1 if we're using enc_*, or 0 if we're using dec_*
-behavior addRoundKey128( in unsigned char round, in unsigned char isEncode ) { 
+behavior addRoundKey128(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) { 
 
 	void main (void){
 #if DEBUG_ADD
@@ -25,18 +23,10 @@ behavior addRoundKey128( in unsigned char round, in unsigned char isEncode ) {
 #endif
 
 
-    if (isEncode) {
-      for (i = 0; i < 16; i ++){
-        //bitwise XOR with key
-        enc_block[i] = enc_block[i] ^ enc_key[i + (round << 4)];
-      }
-    } else {  // decode
-      for (i = 0; i < 16; i ++){
-        //bitwise XOR with key
-        dec_block[i] = dec_block[i] ^ dec_key[i + (round << 4)];
-      }
+    for (i = 0; i < 16; i ++){
+      //bitwise XOR with key
+      block_out[i] = block_in[i] ^ key[i];
     }
-
 
 #if DEBUG_ADD
     printf("AddRoundKey send block %u\n", countBlock);

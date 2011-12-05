@@ -12,43 +12,50 @@ import "invFinalRound128";
 //import "readBlock128";
 //import "writeBlock128";
 
-unsigned char dec_block[16];
-unsigned char dec_key[176];
+behavior AES128Dec(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
 
-behavior AES128Dec{
-  unsigned char isEncode = (unsigned char) 0;
-  unsigned char round0 = (unsigned char) 0;
-  unsigned char round1 = (unsigned char) 1;
-  unsigned char round2 = (unsigned char) 2;
-  unsigned char round3 = (unsigned char) 3;
-  unsigned char round4 = (unsigned char) 4;
-  unsigned char round5 = (unsigned char) 5;
-  unsigned char round6 = (unsigned char) 6;
-  unsigned char round7 = (unsigned char) 7;
-  unsigned char round8 = (unsigned char) 8;
-  unsigned char round9 = (unsigned char) 9;
-  unsigned char round10 = (unsigned char) 10;
+  unsigned char block1[16];
+  unsigned char block2[16];
+  unsigned char block3[16];
+  unsigned char block4[16];
+  unsigned char block5[16];
+  unsigned char block6[16];
+  unsigned char block7[16];
+  unsigned char block8[16];
+  unsigned char block9[16];
+  unsigned char block10[16];
+
+  unsigned char key1[16];
+  unsigned char key2[16];
+  unsigned char key3[16];
+  unsigned char key4[16];
+  unsigned char key5[16];
+  unsigned char key6[16];
+  unsigned char key7[16];
+  unsigned char key8[16];
+  unsigned char key9[16];
+  unsigned char key10[16];
 
 	//key scheduler instance
-	keySched128 key_inst( isEncode );  
-	
+	keySched128 key_inst(key, key1, key2, key3, key4, key5, key6, key7, key8, key9, key10);
+
 	//instances of rounds
-	invFinalRound128  invfirst_inst1(round10, isEncode);
-	invNormalRound128 invnormal_inst2(round9, isEncode);
-	invNormalRound128 invnormal_inst3(round8, isEncode);
-	invNormalRound128 invnormal_inst4(round7, isEncode);
-	invNormalRound128 invnormal_inst5(round6, isEncode);
-	invNormalRound128 invnormal_inst6(round5, isEncode);
-	invNormalRound128 invnormal_inst7(round4, isEncode);
-	invNormalRound128 invnormal_inst8(round3, isEncode);
-	invNormalRound128 invnormal_inst9(round2, isEncode);
-	invNormalRound128 invnormal_inst10(round1, isEncode);
-	invFirstRound128  invfinal_inst10(round0, isEncode);
+	invFinalRound128  invfinal_inst1(key10, block_in, block10);
+	invNormalRound128 invnormal_inst2(key9, block10, block9);
+	invNormalRound128 invnormal_inst3(key8, block9, block8);
+	invNormalRound128 invnormal_inst4(key7, block8, block7);
+	invNormalRound128 invnormal_inst5(key6, block7, block6);
+	invNormalRound128 invnormal_inst6(key5, block6, block5);
+	invNormalRound128 invnormal_inst7(key4, block5, block4);
+	invNormalRound128 invnormal_inst8(key3, block4, block3);
+	invNormalRound128 invnormal_inst9(key2, block3, block2);
+	invNormalRound128 invnormal_inst10(key1, block2, block1);
+	invFirstRound128  invfirst_inst10(key, block1, block_out);
 
 	void main (void){
 		fsm{
-			key_inst : {goto invfirst_inst1;}
-			invfirst_inst1 : {goto invnormal_inst2;}
+			key_inst : {goto invfinal_inst1;}
+			invfinal_inst1 : {goto invnormal_inst2;}
 			invnormal_inst2 : {goto invnormal_inst3;}
 			invnormal_inst3 : {goto invnormal_inst4;}
 			invnormal_inst4 : {goto invnormal_inst5;}
@@ -57,8 +64,8 @@ behavior AES128Dec{
 			invnormal_inst7 : {goto invnormal_inst8;}
 			invnormal_inst8 : {goto invnormal_inst9;}
 			invnormal_inst9 : {goto invnormal_inst10;}
-			invnormal_inst10 : {goto invfinal_inst10;}
-			invfinal_inst10 : {break;}
+			invnormal_inst10 : {goto invfirst_inst10;}
+			invfirst_inst10 : {break;}
 		}
 	}
 };

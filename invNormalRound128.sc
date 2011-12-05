@@ -6,14 +6,16 @@ import "invByteSub128";
 import "invMixColumns128";
 import "invShiftRows128";
 
-behavior invNormalRound128 ( unsigned char round, unsigned char isEncode) {
-	invByteSub128 invbyte_inst(round, isEncode);
+behavior invNormalRound128 (in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
 
-	invShiftRow128 invshift_inst(round, isEncode);
+  unsigned char block1[16];
+  unsigned char block2[16];
+  unsigned char block3[16];
 
-	invMixColumns128 invmix_inst(round, isEncode);
-
-	addRoundKey128 add_inst(round, isEncode);
+	invByteSub128 invbyte_inst(block3, block_out);
+	invShiftRow128 invshift_inst(block2, block3);
+	invMixColumns128 invmix_inst(block1, block2);
+	addRoundKey128 add_inst(key, block_in, block1);
 
 	void main (void){
 		fsm {
