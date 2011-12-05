@@ -15,7 +15,7 @@ behavior Main (){
 
     unsigned char input_block[16];
     //unsigned char IV_block[16];
-    unsigned char input_key[176];
+    unsigned char input_key[16];
     unsigned char output_block[16];
    
     unsigned char mode;

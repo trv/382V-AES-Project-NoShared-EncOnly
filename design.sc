@@ -1,12 +1,14 @@
 #define DEBUG_DESIGN 0
 //#include <stdio.h>
 
+#include "topShared.h"
+
 import "controller";
 import "AES128Enc";
 import "AES128Dec";
 
 
-behavior Design(in unsigned char mode, in unsigned char input_block[16], in unsigned char input_key[176], out unsigned char output_block[16]) {
+behavior Design(in unsigned char mode, in unsigned char input_block[16], in unsigned char input_key[16], out unsigned char output_block[16]) {
 
     unsigned char output_block_enc[16];
     unsigned char output_block_dec[16];
