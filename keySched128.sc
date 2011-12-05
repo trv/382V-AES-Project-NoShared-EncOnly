@@ -1,15 +1,14 @@
-#define DEBUG_KEYSCHED_0 0
-#define DEBUG_KEYSCHED_1 0
-#define DEBUG_KEYSCHED_2 0
-#define DEBUG_KEYSCHED_3 0
-#define DEBUG_KEYSCHED_4 0
+#define DEBUG_KEYSCHED_0 1
+#define DEBUG_KEYSCHED_1 1
+#define DEBUG_KEYSCHED_2 1
+#define DEBUG_KEYSCHED_3 1
+#define DEBUG_KEYSCHED_4 1
 
 #if DEBUG_KEYSCHED_0
 #include <stdio.h>
 #endif
 
 #include "shared.h"
-import "c_queue";
 
 behavior keySched128(in unsigned char key[16], 
                     out unsigned char key1[16],
@@ -75,12 +74,13 @@ behavior keySched128(in unsigned char key[16],
 
 	void main (void){
 		unsigned char temp[4];
-    unsigned char full_key[176];
+    	unsigned char full_key[176];
 		unsigned char i = 0;	//rcon index
 		int c;		//key index
 		int j;		//generic loop index
 #if DEBUG_KEYSCHED_1
 		int index = 0;
+		int index2 = 0;
 		int receiveCount = 0;
 		int sendCount = 0;
 #endif
@@ -116,23 +116,29 @@ behavior keySched128(in unsigned char key[16],
     }
 
     // write keys into outputs
-    for (i=0; i < 16; i++) {
-      key1[i] = full_key[i + (16*1)];
-      key2[i] = full_key[i + (16*2)];
-      key3[i] = full_key[i + (16*3)];
-      key4[i] = full_key[i + (16*4)];
-      key5[i] = full_key[i + (16*5)];
-      key6[i] = full_key[i + (16*6)];
-      key7[i] = full_key[i + (16*7)];
-      key8[i] = full_key[i + (16*8)];
-      key9[i] = full_key[i + (16*9)];
-      key10[i] = full_key[i + (16*10)];
+    for (index=0; index < 16; index++) {
+      key1[index] = full_key[index + (16*1)];
+      key2[index] = full_key[index + (16*2)];
+      key3[index] = full_key[index + (16*3)];
+      key4[index] = full_key[index + (16*4)];
+      key5[index] = full_key[index + (16*5)];
+      key6[index] = full_key[index + (16*6)];
+      key7[index] = full_key[index + (16*7)];
+      key8[index] = full_key[index + (16*8)];
+      key9[index] = full_key[index + (16*9)];
+      key10[index] = full_key[index + (16*10)];
     }
 
 #if DEBUG_KEYSCHED_4
-			sendCount += 11;
-			printf("KeySched sent key number up through %u\n", sendCount);
+	sendCount += 11;
+	printf("KeySched sent key number up through %u\n", sendCount);
+	for (index = 0; index < 11; index++){
+			//printf("Key #%u\n", index+1);
+			for (index2 = 0; index2< 16; index2++){
+					printf("%02hhx ", full_key[16*index + index2]);
+			}
+			printf("\n");
+	}
 #endif
 	}
-
 };
