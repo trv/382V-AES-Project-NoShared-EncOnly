@@ -1,6 +1,5 @@
-
 #include "shared.h"
-import "c_queue";
+import "i_sender";
 
 behavior writeBlock128(i_sender blockOut, in unsigned char isEncode) {
 

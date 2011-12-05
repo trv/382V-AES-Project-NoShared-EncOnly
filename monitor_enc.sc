@@ -1,4 +1,4 @@
-#define DEBUG_MON_ENC 0
+#define DEBUG_MON_ENC 1
 
 #if DEBUG_MON_ENC
 #include <stdio.h>

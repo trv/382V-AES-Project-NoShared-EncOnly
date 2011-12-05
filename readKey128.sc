@@ -1,6 +1,5 @@
-
 #include "shared.h"
-import "c_queue";
+import "i_receiver";
 
 behavior readKey128(i_receiver keyIn, in unsigned char isEncode) {
 

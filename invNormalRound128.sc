@@ -1,12 +1,17 @@
+#define DEBUG_INVROUND 1
+
 #include "shared.h"
-import "c_queue";
 
 import "addRoundKey128";
 import "invByteSub128";
 import "invMixColumns128";
 import "invShiftRows128";
 
+#if DEBUG_INVROUND	
+behavior invNormalRound128 (in unsigned char key[16], in unsigned char block_in[16], inout unsigned char block_out[16]) {
+#else
 behavior invNormalRound128 (in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
+#endif
 
   unsigned char block1[16];
   unsigned char block2[16];

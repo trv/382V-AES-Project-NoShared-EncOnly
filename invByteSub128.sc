@@ -1,13 +1,16 @@
-#define	DEBUG_INVBYTESUB 0
+#define	DEBUG_INVBYTESUB 1
 
 #include "shared.h"
-import "c_queue";
 
 #if DEBUG_INVBYTESUB
 #include <stdio.h>
 #endif
 
+#if DEBUG_INVBYTESUB
+behavior invByteSub128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
+#else
 behavior invByteSub128(in unsigned char block_in[16], out unsigned char block_out[16]) {
+#endif
 
 	const unsigned char invByteSubTable[256] = {
 		0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,
@@ -36,11 +39,10 @@ behavior invByteSub128(in unsigned char block_in[16], out unsigned char block_ou
 			printf("InvBytesub received block %u\n", ++count);
 			printf("InvBytesub block data received:\n");
 			for (i = 0; i < 16; i++){
-			//	printf("%02hhx ", block[i]);
+				printf("%02hhx ", block_in[i]);
 			}
 			printf("\n");
 #endif
-
       for (i = 0; i < 16; i++){
         block_out[i] = invByteSubTable[block_in[i]];
       }
@@ -49,7 +51,7 @@ behavior invByteSub128(in unsigned char block_in[16], out unsigned char block_ou
 			printf("InvBytesub sent block %u\n", count);
 			printf("InvBytesub block data sent:\n");
 			for (i = 0; i < 16; i++){
-			//	printf("%02hhx ", block[i]);
+				printf("%02hhx ", block_out[i]);
 			}
 			printf("\n");
 #endif
