@@ -9,12 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-import "i_receiver";
-import "i_sender";
-
 #include "topShared.h"
 
-behavior stimulus(inout unsigned short iter, out unsigned char mode) {
+behavior stimulus(inout unsigned short iter, out unsigned char mode, out unsigned char input_block[16], out unsigned char input_key[176], in unsigned char output_block[16]) {
 
 	bool checkBlock(unsigned char * golden, unsigned char * check, int length){
 		int i;
