@@ -1,7 +1,5 @@
 #define	DEBUG_INVBYTESUB 0
 
-#include "shared.h"
-
 #if DEBUG_INVBYTESUB
 #include <stdio.h>
 #endif

@@ -8,8 +8,6 @@
 #include <stdio.h>
 #endif
 
-#include "shared.h"
-
 behavior keySched128(in unsigned char key[16], 
                     out unsigned char key1[16],
                     out unsigned char key2[16],

@@ -1,8 +1,5 @@
 #define DEBUG_INVSHIFT 0
 
-#include "shared.h"
-import "c_queue";
-
 #if DEBUG_INVSHIFT
 #include <stdio.h>
 #endif
@@ -13,16 +10,8 @@ behavior invShiftRow128(in unsigned char block_in[16], inout unsigned char block
 behavior invShiftRow128(in unsigned char block_in[16], out unsigned char block_out[16]) {
 #endif
 
-	//rotateRights in place 32 bits (in 4 unsigned chars) one byte	
-	void rotateRight (unsigned char * word32, unsigned char * word32Out){
-		word32Out[12] = word32[8];
-		word32Out[8] = word32[4];
-		word32Out[4] = word32[0];
-		word32Out[0] = word32[12];
-	}
 
 	void main (void){
-		int i, j;
 #if DEBUG_INVSHIFT
 		int count = 0;
 #endif
@@ -53,6 +42,7 @@ behavior invShiftRow128(in unsigned char block_in[16], out unsigned char block_o
       block_out[13] = block_in[9];
       block_out[14] = block_in[6];
       block_out[15] = block_in[3];
+
 #if DEBUG_INVSHIFT
 			printf("InvShiftRow sent block %u\n", count);
 			printf("InvShiftRow block data sent:\n");

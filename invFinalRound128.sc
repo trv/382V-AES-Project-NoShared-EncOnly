@@ -1,7 +1,5 @@
 #define DEBUG_INVROUND 0
 
-#include "shared.h"
-
 import "invByteSub128";
 import "invShiftRows128";
 import "addRoundKey128";

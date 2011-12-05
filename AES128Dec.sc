@@ -4,10 +4,6 @@
 #endif
 
 import "keySched128";
-import "invByteSub128";
-import "addRoundKey128";
-import "invShiftRows128";
-import "invMixColumns128";
 import "invFirstRound128";
 import "invNormalRound128";
 import "invFinalRound128";

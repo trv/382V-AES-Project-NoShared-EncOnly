@@ -16,7 +16,7 @@ behavior Design(in unsigned char mode, in unsigned char input_block[16], in unsi
     unsigned char output_block_dec[16];
 
 	//controls the different block modes
-    controllerIn control_in_inst(mode);
+  controllerIn control_in_inst(mode);
 	controllerOut control_out_inst(mode, output_block_enc, output_block_dec, output_block);
 
 	//AES Encryption Instance
@@ -32,7 +32,7 @@ behavior Design(in unsigned char mode, in unsigned char input_block[16], in unsi
                         if (mode == MODE_ECB_DEC) goto aes_dec_inst;}
 			aes_enc_inst: {goto control_out_inst;}
 			aes_dec_inst: {goto control_out_inst;}
-      		control_out_inst: {break;}
+     	control_out_inst: {break;}
 		}
 	}
 };

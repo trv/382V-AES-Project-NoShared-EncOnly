@@ -1,8 +1,5 @@
 #define	DEBUG_BYTESUB 0
 
-#include "shared.h"
-import "c_queue";
-
 #if DEBUG_BYTESUB
 #include <stdio.h>
 #endif

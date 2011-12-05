@@ -1,7 +1,5 @@
 #define DEBUG_SHIFT 0
 
-#include "shared.h"
-
 #if DEBUG_SHIFT
 #include <stdio.h>
 #endif
@@ -12,16 +10,7 @@ behavior shiftRow128(in unsigned char block_in[16], inout unsigned char block_ou
 behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[16]) {
 #endif
 
-	//rotateLefts in place 32 bits (in 4 unsigned chars) one byte	
-	void rotateLeft (unsigned char * word32, unsigned char * word32Out){
-		word32Out[0] = word32[4];
-		word32Out[4] = word32[8];
-		word32Out[8] = word32[12];
-		word32Out[12] = word32[0];
-	}
-
 	void main (void){
-		int i, j;
 #if DEBUG_SHIFT
 		int count = 0;
 #endif
@@ -33,6 +22,7 @@ behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[
 		}
 		printf("\n");
 #endif
+
 		block_out[0]  = block_in[0];
 		block_out[1]  = block_in[5];
 		block_out[2]  = block_in[10];

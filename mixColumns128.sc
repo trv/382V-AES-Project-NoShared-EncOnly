@@ -4,8 +4,6 @@
 #include <stdio.h>
 #endif
 
-#include "shared.h"
-
 behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
     
     void mixColumn(unsigned char *r) {

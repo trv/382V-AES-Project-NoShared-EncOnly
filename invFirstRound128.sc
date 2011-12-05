@@ -1,7 +1,5 @@
 #define DEBUG_INVROUND 0
 
-#include "shared.h"
-
 import "addRoundKey128";
 
 #if DEBUG_INVROUND
