@@ -5,9 +5,9 @@
 #endif
 
 #if DEBUG_ADD
-behavior addRoundKey128(in unsigned char key[16], in unsigned char block_in[16], inout unsigned char block_out[16]) { 
+behavior addRoundKey128(in unsigned char key[176], in unsigned char round, in unsigned char block_in[16], inout unsigned char block_out[16]) { 
 #else
-behavior addRoundKey128(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) { 
+behavior addRoundKey128(in unsigned char key[176], in unsigned char round, in unsigned char block_in[16], out unsigned char block_out[16]) { 
 #endif
 
 	void main (void){
@@ -22,7 +22,7 @@ behavior addRoundKey128(in unsigned char key[16], in unsigned char block_in[16],
 #endif
     for (i = 0; i < 16; i ++){
       //bitwise XOR with key
-      block_out[i] = block_in[i] ^ key[i];
+      block_out[i] = block_in[i] ^ key[i + (16*round)];
     }
 #if DEBUG_ADD
     printf("AddRoundKey send block %u\n", countBlock);

@@ -8,17 +8,7 @@
 #include <stdio.h>
 #endif
 
-behavior keySched128(in unsigned char key[16], 
-                    out unsigned char key1[16],
-                    out unsigned char key2[16],
-                    out unsigned char key3[16],
-                    out unsigned char key4[16],
-                    out unsigned char key5[16],
-                    out unsigned char key6[16],
-                    out unsigned char key7[16],
-                    out unsigned char key8[16],
-                    out unsigned char key9[16],
-                    out unsigned char key10[16]) {
+behavior keySched128(in unsigned char key[16], inout unsigned char exp_key[176] ) {
 	const unsigned char RconBox[15] = {
 		0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a};
 
@@ -72,7 +62,7 @@ behavior keySched128(in unsigned char key[16],
 
 	void main (void){
 		unsigned char temp[4];
-    	unsigned char full_key[176];
+    //	unsigned char full_key[176];
 		unsigned char i = 0;	//rcon index
 		int c;		//key index
 		int j;		//generic loop index
@@ -95,24 +85,24 @@ behavior keySched128(in unsigned char key[16],
 
     // copy key into full_key
     for (c = 0; c < 16; c++) {
-      full_key[c] = key[c];
+      exp_key[c] = key[c];
     }
 
     // expand key
     for (c = 16; c < 176;) {
       for (j = 0; j < 4; j++){
-        temp[j] = full_key[j+c-4];
+        temp[j] = exp_key[j+c-4];
       }
       if (c % 16 == 0) {
         core(temp, i);
         i++;
       }
       for (j = 0; j < 4 && c < 176; j++){
-        full_key[c] = full_key[c-16] ^ temp[j];
+        exp_key[c] = exp_key[c-16] ^ temp[j];
         c++;
       }
     }
-
+/*
     // write keys into outputs
     for (c=0; c < 16; c++) {
       key1[c] = full_key[c + (16*1)];
@@ -126,7 +116,7 @@ behavior keySched128(in unsigned char key[16],
       key9[c] = full_key[c + (16*9)];
       key10[c] = full_key[c + (16*10)];
     }
-
+*/
 #if DEBUG_KEYSCHED_4
 	sendCount += 11;
 	printf("KeySched sent key number up through %u\n", sendCount);
