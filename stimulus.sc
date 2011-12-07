@@ -43,6 +43,8 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
     char *text;
 
     if (iter == 0 && loop == 0) {
+      printf("[ENCRYPT]\n");
+
       text = keys[loop];
       for (i=0; i < 16; i++) {
         sscanf(text, "%2hhx", &input_key[i]);
