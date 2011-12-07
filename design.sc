@@ -7,10 +7,10 @@
 
 import "AES128Enc";
 
-behavior Design(in unsigned char mode, in unsigned char input_block[16], in unsigned char input_key[16], out unsigned char output_block[16]) {
+behavior Design(in unsigned char mode, in unsigned char input_key[16], inout unsigned char block[16]) {
 
 	//AES Encryption Instance
-	AES128Enc aes_enc_inst(input_key, input_block, output_block);
+	AES128Enc aes_enc_inst(input_key, block);
 
 	void main(void) {
     //printf("starting design...\n");

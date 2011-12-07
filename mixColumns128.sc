@@ -4,7 +4,7 @@
 #include <stdio.h>
 #endif
 
-behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
+behavior mixColumns128(inout unsigned char block[16]) {
     
     void mixColumn(unsigned char *r) {
         unsigned char a[4];
@@ -41,14 +41,9 @@ behavior mixColumns128(in unsigned char block_in[16], inout unsigned char block_
 		printf("\n");
 #endif
 
-    // copy input to output
-    for (i = 0; i < 16; i++) {
-      block_out[i] = block_in[i];
-    }
-
     // mixcolumns on output block
     for (i = 0; i < 4; i++) {
-        mixColumn(block_out + (i*4));
+        mixColumn(block + (i*4));
     }
 
 #if DEBUG_MIX

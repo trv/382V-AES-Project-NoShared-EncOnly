@@ -8,25 +8,18 @@ import "firstRound128";
 import "normalRound128";
 import "finalRound128";
 
-#if DEBUG_AES128ENC
-behavior AES128Enc(in unsigned char key[16], in unsigned char block_in[16], inout unsigned char block_out[16]) {
-#else
-behavior AES128Enc(in unsigned char key[16], in unsigned char block_in[16], out unsigned char block_out[16]) {
-#endif
-
-  unsigned char block[16];
+behavior AES128Enc(in unsigned char key[16], inout unsigned char block[16]) {
 
   unsigned char exp_key[176];
-
   unsigned char round = 0;
 
 	//key scheduler instance
 	keySched128 key_inst(key, exp_key);
 
 	//instances of rounds
-	firstRound128  first_inst(exp_key, block_in, block);
+	firstRound128  first_inst(exp_key, block);
 	normalRound128 normal_inst(exp_key, round, block);
-	finalRound128  final_inst(exp_key, block, block_out);
+	finalRound128  final_inst(exp_key, block);
 
 	void main (void){
 #if DEBUG_AES128ENC

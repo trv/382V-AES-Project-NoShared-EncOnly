@@ -4,11 +4,7 @@
 #include <stdio.h>
 #endif
 
-#if DEBUG_ADD
-behavior addRoundKey128(in unsigned char key[176], in unsigned char round, in unsigned char block_in[16], inout unsigned char block_out[16]) { 
-#else
-behavior addRoundKey128(in unsigned char key[176], in unsigned char round, in unsigned char block_in[16], out unsigned char block_out[16]) { 
-#endif
+behavior addRoundKey128(in unsigned char key[176], in unsigned char round, inout unsigned char block[16]) { 
 
 	void main (void){
 #if DEBUG_ADD
@@ -22,7 +18,7 @@ behavior addRoundKey128(in unsigned char key[176], in unsigned char round, in un
 #endif
     for (i = 0; i < 16; i ++){
       //bitwise XOR with key
-      block_out[i] = block_in[i] ^ key[i + (16*round)];
+      block[i] = block[i] ^ key[i + (16*round)];
     }
 #if DEBUG_ADD
     printf("AddRoundKey send block %u\n", countBlock);
@@ -33,7 +29,7 @@ behavior addRoundKey128(in unsigned char key[176], in unsigned char round, in un
     printf("\n");
     printf("AddRoundKey block data:\n");
     for (i = 0; i < 16; i++){
-      printf("%02hhx ", block_out[i]);
+      printf("%02hhx ", block[i]);
     }
     printf("\n");
 #endif

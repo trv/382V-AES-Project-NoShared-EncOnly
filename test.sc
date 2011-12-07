@@ -7,24 +7,22 @@ import "design";
 
 behavior AES (){
 
-  unsigned char input_block[16];
   //unsigned char IV_block[16];
   unsigned char input_key[16];
-  unsigned char output_block[16];
+  unsigned char block[16];
  
   unsigned char mode;
   unsigned short iter = 0;
 
-
 	//stimulus instance
-	stimulus stim_inst(iter, mode, input_block, input_key, output_block);
+	stimulus stim_inst(iter, mode, input_key, block);
 	
-	Design design_inst(mode, input_block, input_key, output_block);
+	Design design_inst(mode, input_key, block);
 
   void printOutput() {
     int i;
     for (i=0; i < 16; i++) {
-      printf("%02hhX", output_block[i]);
+      printf("%02hhX", block[i]);
     }
   }
 

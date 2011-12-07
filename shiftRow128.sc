@@ -4,13 +4,11 @@
 #include <stdio.h>
 #endif
 
-#if DEBUG_SHIFT
-behavior shiftRow128(in unsigned char block_in[16], inout unsigned char block_out[16]) {
-#else
-behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[16]) {
-#endif
+behavior shiftRow128(inout unsigned char block[16]) {
 
 	void main (void){
+    unsigned char b[16];
+    unsigned char i;
 #if DEBUG_SHIFT
 		int count = 0;
 #endif
@@ -18,33 +16,35 @@ behavior shiftRow128(in unsigned char block_in[16], out unsigned char block_out[
 		printf("ShiftRow received block %u\n", ++count);
 		printf("ShiftRow block data received:\n");
 		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block_in[i]);
+			printf("%02hhx ", block[i]);
 		}
 		printf("\n");
 #endif
 
-		block_out[0]  = block_in[0];
-		block_out[1]  = block_in[5];
-		block_out[2]  = block_in[10];
-		block_out[3]  = block_in[15];
-		block_out[4]  = block_in[4];
-		block_out[5]  = block_in[9];
-		block_out[6]  = block_in[14];
-		block_out[7]  = block_in[3];
-		block_out[8]  = block_in[8];
-		block_out[9]  = block_in[13];
-		block_out[10] = block_in[2];
-		block_out[11] = block_in[7];
-		block_out[12] = block_in[12];
-		block_out[13] = block_in[1];
-		block_out[14] = block_in[6];
-		block_out[15] = block_in[11];
+		b[0]  = block[0];
+		b[1]  = block[5];
+		b[2]  = block[10];
+		b[3]  = block[15];
+		b[4]  = block[4];
+		b[5]  = block[9];
+		b[6]  = block[14];
+		b[7]  = block[3];
+		b[8]  = block[8];
+		b[9]  = block[13];
+		b[10] = block[2];
+		b[11] = block[7];
+		b[12] = block[12];
+		b[13] = block[1];
+		b[14] = block[6];
+		b[15] = block[11];
+
+    for (i=0; i < 16; i++) block[i] = b[i];
 		
 #if DEBUG_SHIFT
 		printf("ShiftRow sent block %u\n", count);
 		printf("ShiftRow block data sent:\n");
 		for (i = 0; i < 16; i++){
-			printf("%02hhx ", block_out[i]);
+			printf("%02hhx ", block[i]);
 		}
 		printf("\n");
 #endif

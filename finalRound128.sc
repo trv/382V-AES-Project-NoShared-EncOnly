@@ -4,19 +4,13 @@ import "byteSub128";
 import "shiftRow128";
 import "addRoundKey128";
 
-#if DEBUG_ROUND
-behavior finalRound128(in unsigned char key[176], in unsigned char block_in[16], inout unsigned char block_out[16]) {
-#else
-behavior finalRound128(in unsigned char key[176], in unsigned char block_in[16], out unsigned char block_out[16]) {
-#endif
+behavior finalRound128(in unsigned char key[176], inout unsigned char block[16]) {
 
-  unsigned char block1[16];
-  unsigned char block2[16];
   unsigned char round = 10;
 
-	byteSub128 byte_inst(block_in, block1);
-	shiftRow128 shift_inst(block1, block2);
-	addRoundKey128 add_inst(key, round, block2, block_out);
+	byteSub128 byte_inst(block);
+	shiftRow128 shift_inst(block);
+	addRoundKey128 add_inst(key, round, block);
 
 	void main (void){
 		fsm {
