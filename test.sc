@@ -32,8 +32,7 @@ behavior AES (){
 			//stimulus
 			stim_inst: {goto design_inst;}
 			// runs both AES128Enc and AES128Dec in parallel
-			design_inst: {if (iter != 2001) goto stim_inst;
-                    break;}
+			design_inst: {goto stim_inst;}
       }
 	}
 
