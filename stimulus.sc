@@ -1,5 +1,6 @@
 #define DEBUG_STIM 0
 #define DEBUG_STIM_IV 0
+#define TIMING 0
 #define CBC_VECTORS	"vectors/CBCMCT128.rsp"
 #define ECB_VECTORS	"vectors/ECBMCT128.rsp"
 #define ENCRYPT_LIST "encrypt.txt"
@@ -9,7 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if TIMING
 #include <sys/time.h>
+#endif
 
 #include "topShared.h"
 
@@ -20,8 +23,10 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
   int loop = 0;
   unsigned char plaintext[16];
 
+#if TIMING
 	struct timeval start, end;
 	struct timezone starttz, endtz;
+#endif
 
 	bool checkBlock(unsigned char * golden, unsigned char * check, int length){
 		int i;
@@ -48,7 +53,9 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
     char *text;
 
     if (iter == 0 && loop == 0) {
+#if TIMING
 			gettimeofday(&start, &starttz);
+#endif
       printf("[ENCRYPT]\n");
 
       text = keys[loop];
@@ -120,9 +127,11 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
 
       if (loop == 100) {
         // done with encrypt test, so exit
+#if TIMING
         gettimeofday(&end, &endtz);
         printf("start: %ld.%ld\nend:   %ld.%ld\n", start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);
         printf("diff:  %ld.%ld\n", (end.tv_sec - start.tv_sec) + ((end.tv_usec - start.tv_usec) / 1000000), ((end.tv_usec - start.tv_usec) % 1000000));
+#endif
         exit(0);
       }
     } 
