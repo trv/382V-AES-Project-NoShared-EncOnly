@@ -20,6 +20,9 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
   int loop = 0;
   unsigned char plaintext[16];
 
+	struct timeval start, end;
+	struct timezone starttz, endtz;
+
 	bool checkBlock(unsigned char * golden, unsigned char * check, int length){
 		int i;
 		for (i = 0; i < length; i++){
@@ -43,8 +46,6 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
 	void main (void){
     unsigned char i;
     char *text;
-	struct timeval start, end;
-	struct timezone starttz, endtz;
 
     if (iter == 0 && loop == 0) {
 			gettimeofday(&start, &starttz);
@@ -119,8 +120,9 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
 
       if (loop == 100) {
         // done with encrypt test, so exit
-		gettimeofday(&end, &endtz);
-		printf("start: %ld.%ld\nend:   %ld.%ld\n", start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);
+        gettimeofday(&end, &endtz);
+        printf("start: %ld.%ld\nend:   %ld.%ld\n", start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);
+        printf("diff:  %ld.%ld\n", (end.tv_sec - start.tv_sec) + ((end.tv_usec - start.tv_usec) / 1000000), ((end.tv_usec - start.tv_usec) % 1000000));
         exit(0);
       }
     } 
