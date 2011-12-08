@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sys/time.h>
+
 #include "topShared.h"
 
 behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsigned char input_key[16], inout unsigned char block[16]) {
@@ -41,8 +43,11 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
 	void main (void){
     unsigned char i;
     char *text;
+	struct timeval start, end;
+	struct timezone starttz, endtz;
 
     if (iter == 0 && loop == 0) {
+			gettimeofday(&start, &starttz);
       printf("[ENCRYPT]\n");
 
       text = keys[loop];
@@ -114,6 +119,8 @@ behavior stimulus(inout unsigned short iter, out unsigned char mode, inout unsig
 
       if (loop == 100) {
         // done with encrypt test, so exit
+		gettimeofday(&end, &endtz);
+		printf("start: %ld.%ld\nend:   %ld.%ld\n", start.tv_sec, start.tv_usec, end.tv_sec, end.tv_usec);
         exit(0);
       }
     } 
